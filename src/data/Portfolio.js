@@ -1,6 +1,7 @@
 export const skills = [
   { name: 'Vite', level: 80 },
   { name: 'React', level: 85 },
+  { name: 'PHP', level: 75 },
   { name: 'JavaScript', level: 90 },
   { name: 'Tailwind CSS', level: 90 }
 ];
@@ -39,11 +40,11 @@ export const personalInfo = {
   name: 'Riyansyah Anugrah Pratama',
   title: 'Frontend Developer',
   bio: 'I build performant and accessible web apps using React, Vite and Tailwind CSS.',
+  email: 'riyansyahanugrahprtm@gmail.com',
   profileImage: '/images/profile.png',
   resumeUrl: '/resume.pdf',
   social: {
     github: 'https://github.com/Riyansyah78',
-    linkedin: 'https://www.linkedin.com/in/yourusername/',
     twitter: 'https://x.com/rynn_iam'
   }
 };

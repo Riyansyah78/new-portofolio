@@ -24,7 +24,7 @@ const ContactModal = ({ isOpen, onClose }) => {
 
     // Replace the URL below with your Formspree endpoint.
     // Example: https://formspree.io/f/xxxxx
-    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xankkgor';
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mrbdvgnk';
 
     try {
       const res = await fetch(FORMSPREE_ENDPOINT, {
@@ -177,8 +177,10 @@ const ContactModal = ({ isOpen, onClose }) => {
         <div className="mt-8 pt-8 border-t border-gray-800">
           <p className="text-gray-400 text-sm text-center mb-4">Or reach me directly via:</p>
           <div className="flex justify-center gap-6">
-            <a 
-              href={`mailto:${personalInfo.email}`} 
+            <a
+              href={`https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(personalInfo.email)}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-300 hover:text-white transition-colors flex items-center gap-2"
             >
               <span>📧</span> Email

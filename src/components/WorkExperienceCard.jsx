@@ -26,21 +26,6 @@ const WorkExperienceCard = ({ experience, index }) => {
       <p className="text-gray-400 text-sm leading-relaxed mb-4">
         {experience.description}
       </p>
-
-      {/* Achievements */}
-      {experience.achievements && experience.achievements.length > 0 && (
-        <div className="mb-4">
-          <p className="text-gray-300 text-sm font-medium mb-2">Key Achievements:</p>
-          <ul className="space-y-1">
-            {experience.achievements.map((achievement, idx) => (
-              <li key={idx} className="text-gray-400 text-sm flex items-start">
-                <span className="text-white mr-2">•</span>
-                <span>{achievement}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };

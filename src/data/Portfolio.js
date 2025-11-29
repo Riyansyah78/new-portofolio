@@ -48,3 +48,15 @@ export const personalInfo = {
     twitter: 'https://x.com/rynn_iam'
   }
 };
+
+export const workExperience = [
+  {
+    id: 1,
+    position: 'Intern IT Support',
+    company: 'Griya Sarana Informatika',
+    location: 'Cirebon, Indonesia',
+    period: 'July - december 2024',
+    description: 'Skilled and motivated IT Support Intern with hands-on experience troubleshooting hardware, software, and network issues; comfortable providing user support, maintaining inventory, and documenting solutions. Eager to learn, collaborate, and contribute to a fast-paced IT team.',
+    tech: ['PHP', 'MySQL', ]
+  },
+];

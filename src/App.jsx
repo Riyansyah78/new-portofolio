@@ -5,6 +5,7 @@ import SkillsSection from './components/SkillsSection';
 import ProjectsSection from './components/ProjectsSection';
 import ContactModal from './components/ContactModal';
 import Footer from './components/Footer';
+import WorkExperienceSection from './components/WorkExperienceSection';
 
 function App() {
   const [showContact, setShowContact] = useState(false);
@@ -24,6 +25,10 @@ function App() {
           {/* Right Panel - Skills */}
           <SkillsSection />
         </div>
+
+         {/* Work Experience Section */}
+        <WorkExperienceSection />
+
 
         {/* Projects Section */}
         <ProjectsSection />

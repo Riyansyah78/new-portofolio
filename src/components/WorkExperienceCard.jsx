@@ -41,18 +41,6 @@ const WorkExperienceCard = ({ experience, index }) => {
           </ul>
         </div>
       )}
-
-      {/* Tech Stack */}
-      <div className="flex flex-wrap gap-2">
-        {experience.tech.map(tech => (
-          <span
-            key={tech}
-            className="px-3 py-1 bg-gray-800 text-gray-300 text-xs rounded-full border border-gray-700 hover:bg-gray-700 transition-colors"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
     </div>
   );
 };

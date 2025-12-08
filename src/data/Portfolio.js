@@ -14,7 +14,7 @@ export const projects = [
     tech: ['PHP', 'MySQL', 'Tailwind'],
     image: '/images/projects/PersonalTask.png',
     demoUrl: 'https://personaltask.rf.gd/login.php',
-    githubUrl: 'https://github.com/yourusername/project-1'
+    githubUrl: 'https://github.com/Riyansyah78/todo_app'
   },
   {
     id: 2,

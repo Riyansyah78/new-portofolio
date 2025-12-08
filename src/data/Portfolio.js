@@ -13,7 +13,7 @@ export const projects = [
     description: 'Modern personal task manager with quick add and prioritization.',
     tech: ['PHP', 'MySQL', 'Tailwind'],
     image: '/images/projects/PersonalTask.png',
-    demoUrl: 'https://personaltask.rf.gd/login.php',
+    demoUrl: 'https://personaltask.free.nf/login.php',
     githubUrl: 'https://github.com/Riyansyah78/todo_app'
   },
   {

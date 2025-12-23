@@ -3,7 +3,8 @@ export const skills = [
   { name: 'React', level: 85 },
   { name: 'PHP', level: 75 },
   { name: 'JavaScript', level: 90 },
-  { name: 'Tailwind CSS', level: 90 }
+  { name: 'Tailwind CSS', level: 90 },
+  { name: 'SQL', level: 80 }
 ];
 
 export const projects = [
@@ -33,7 +34,26 @@ export const projects = [
     image: '/images/projects/film-organizer.png',
     demoUrl: 'https://film-organizer-nu.vercel.app/',
     githubUrl: 'https://github.com/Riyansyah78/film-organizer-react'
+  },
+  {
+    id: 4,
+    name: 'Pustaka Connect',
+    description: 'Pustaka Connect is a digital library system that works like the library in a school or campus. Students can browse available books, check each book’s status, and borrow them through the platform. You can track due dates, manage returns, and see your borrowing history. Librarians can manage collections, update availability, and monitor student activity. The system makes borrowing faster and keeps the library organized.',
+    tech: ['React', 'Tailwind', 'Vite', 'Supabase'],
+    image: '/images/projects/pustaka-connect.png',
+    demoUrl: 'https://pustaka-connect.vercel.app/',
+    githubUrl: 'https://github.com/Riyansyah78/library-app'
+  },
+  {
+    id: 5,
+    name: 'Soundcloud Clone',
+    description: 'A Soundcloud clone built with React, Tailwind CSS, and Supabase for music streaming and sharing.',
+    tech: ['React', 'Tailwind', 'Vite', 'Supabase'],
+    image: '/images/projects/soundcloud-clone.png',
+    demoUrl: 'https://soundcloud-clone-psi.vercel.app/',
+    githubUrl: 'https://github.com/Riyansyah78/soundcloud-clone'
   }
+  
 ];
 
 export const personalInfo = {

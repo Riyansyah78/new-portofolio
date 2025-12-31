@@ -65,7 +65,8 @@ export const personalInfo = {
   resumeUrl: '/resume.pdf',
   social: {
     github: 'https://github.com/Riyansyah78',
-    twitter: 'https://x.com/rynn_iam'
+    twitter: 'https://x.com/rynn_iam',
+    discord: 'https://discord.com/users/514809747057278977'
   }
 };
 

@@ -24,6 +24,14 @@ const Footer = () => {
         >
           Twitter
         </a>
+        <a 
+          href={personalInfo.social.discord} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-gray-400 hover:text-white transition-colors"
+        >
+          Discord
+        </a>
       </div>
     </footer>
   );

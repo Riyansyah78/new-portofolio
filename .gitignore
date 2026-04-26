@@ -10,6 +10,7 @@ dist-ssr/
 .vinxi/
 .tanstack/
 .nitro/
+.wrangler/
 
 # Environment variables (Penting: Jangan hapus ini agar API Key aman)
 .env

@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "new-portofolio",
+  "name": "riyansyah",
   "compatibility_date": "2026-01-13",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry"

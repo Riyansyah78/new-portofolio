@@ -1,3 +1,23 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+dist-ssr/
+.output/
+.vinxi/
+.tanstack/
+.nitro/
+
+# Environment variables (Penting: Jangan hapus ini agar API Key aman)
+.env
+.env.local
+.env.*.local
+*.local
+.dev.vars
+
 # Logs
 logs
 *.log
@@ -7,18 +27,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# AI Agent & Workspace stuff
+.gemini/
+.agents/
+artifacts/
+mcp_config.json
+.claude.json
 
-# Editor directories and files
-.vscode/*
+# Editor / OS stuff
+.vscode/
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+Thumbs.db

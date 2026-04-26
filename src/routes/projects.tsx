@@ -130,10 +130,10 @@ function ProjectsPage() {
         </div>
 
         {/* Grid */}
-        <motion.div layout className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <motion.div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
-            {visible.map((p) => (
-              <ProjectCard key={p.title} p={p} onClick={() => setActive(p)} />
+            {visible.map((p, i) => (
+              <ProjectCard key={p.title} p={p} index={i} onClick={() => setActive(p)} />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -213,7 +213,7 @@ function ProjectsPage() {
   );
 }
 
-function ProjectCard({ p, onClick }: { p: Project; onClick: () => void }) {
+function ProjectCard({ p, index, onClick }: { p: Project; index: number; onClick: () => void }) {
   const { t } = useI18n();
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
@@ -228,8 +228,9 @@ function ProjectCard({ p, onClick }: { p: Project; onClick: () => void }) {
   return (
     <motion.button
       layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.2, delay: index * 0.05 }}
       exit={{ opacity: 0, scale: 0.9 }}
       onMouseMove={onMove}
       onMouseLeave={onLeave}

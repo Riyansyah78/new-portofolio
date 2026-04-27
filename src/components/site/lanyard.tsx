@@ -485,12 +485,19 @@ function roundRect(
   ctx.closePath();
 }
 
-export function Lanyard3D() {
+export function Lanyard3D({ onContextLost }: { onContextLost?: () => void }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 13], fov: 25 }}
-      gl={{ alpha: true, antialias: true }}
-      dpr={[1, 2]}
+      gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
+      dpr={[1, 1.5]}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener("webglcontextlost", (e) => {
+          e.preventDefault();
+          console.warn("WebGL context lost — switching to fallback");
+          onContextLost?.();
+        });
+      }}
     >
       <ambientLight intensity={Math.PI} />
       <Suspense fallback={null}>

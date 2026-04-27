@@ -1,6 +1,6 @@
 import { useEffect, useState, type ComponentType } from "react";
 
-type LanyardProps = Record<string, never>;
+type LanyardProps = { onContextLost?: () => void };
 
 // Inline fallback to avoid importing from lanyard.tsx (which pulls in Three.js)
 function LanyardFallback() {
@@ -55,5 +55,5 @@ export function LanyardClient() {
 
   if (failed) return <LanyardFallback />;
   if (!Comp) return <LanyardFallback />;
-  return <Comp />;
+  return <Comp onContextLost={() => setFailed(true)} />;
 }

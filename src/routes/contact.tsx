@@ -47,11 +47,53 @@ const socials = [
 function ContactPage() {
   const { t } = useI18n();
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          service_id: "service_lxy2z4t",
+          template_id: "template_4rc08m4",
+          user_id: "7BKGd0IhDJLnAYGfd",
+          template_params: {
+            from_name: data.name,
+            from_email: data.email,
+            reply_to: data.email,
+            message: data.message,
+            to_name: "Riyansyah",
+          },
+        }),
+      });
+
+      if (response.ok) {
+        setSent(true);
+        form.reset();
+        setTimeout(() => setSent(false), 4000);
+      } else {
+        alert("Gagal mengirim pesan. Silakan coba lagi.");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Gagal mengirim pesan. Silakan coba lagi.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -120,9 +162,10 @@ function ContactPage() {
               whileTap={{ scale: 0.96 }}
               whileHover={{ scale: 1.02 }}
               type="submit"
-              className="w-full rounded-full bg-gradient-fun px-6 py-4 font-display text-lg font-bold text-white shadow-pop"
+              disabled={loading}
+              className="w-full rounded-full bg-gradient-fun px-6 py-4 font-display text-lg font-bold text-white shadow-pop disabled:opacity-50"
             >
-              {sent ? t("contact.sent") : t("contact.send")}
+              {loading ? "Mengirim..." : sent ? t("contact.sent") : t("contact.send")}
             </motion.button>
           </motion.form>
 

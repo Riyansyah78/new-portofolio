@@ -1,9 +1,14 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function useLenis() {
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (isMobile) return;
+
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) return;
 
@@ -24,5 +29,5 @@ export function useLenis() {
       cancelAnimationFrame(raf);
       lenis.destroy();
     };
-  }, []);
+  }, [isMobile]);
 }

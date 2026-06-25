@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState, type MouseEvent } from "react";
 import { FloatingBlobs } from "@/components/site/blobs";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/projects")({
@@ -74,6 +75,7 @@ const FILTERS = ["All", "Web", "Mobile", "Open Source"] as const;
 
 function ProjectsPage() {
   const { t } = useI18n();
+  const isMobile = useIsMobile();
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
   const [active, setActive] = useState<Project | null>(null);
 
@@ -133,7 +135,7 @@ function ProjectsPage() {
         <motion.div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {visible.map((p, i) => (
-              <ProjectCard key={p.title} p={p} index={i} onClick={() => setActive(p)} />
+              <ProjectCard key={p.title} p={p} index={i} onClick={() => setActive(p)} disableTilt={isMobile} />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -213,17 +215,32 @@ function ProjectsPage() {
   );
 }
 
-function ProjectCard({ p, index, onClick }: { p: Project; index: number; onClick: () => void }) {
+function ProjectCard({
+  p,
+  index,
+  onClick,
+  disableTilt,
+}: {
+  p: Project;
+  index: number;
+  onClick: () => void;
+  disableTilt?: boolean;
+}) {
   const { t } = useI18n();
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const onMove = (e: MouseEvent<HTMLButtonElement>) => {
+    if (disableTilt) return;
+
     const r = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - 0.5;
     const y = (e.clientY - r.top) / r.height - 0.5;
     setTilt({ x: y * -10, y: x * 12 });
   };
-  const onLeave = () => setTilt({ x: 0, y: 0 });
+  const onLeave = () => {
+    if (disableTilt) return;
+    setTilt({ x: 0, y: 0 });
+  };
 
   return (
     <motion.button
@@ -235,10 +252,14 @@ function ProjectCard({ p, index, onClick }: { p: Project; index: number; onClick
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       onClick={onClick}
-      style={{
-        transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        transition: "transform 0.15s ease-out",
-      }}
+      style={
+        disableTilt
+          ? undefined
+          : {
+              transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transition: "transform 0.15s ease-out",
+            }
+      }
       className="group relative overflow-hidden rounded-3xl border-2 border-foreground bg-card text-left shadow-card"
     >
       <div

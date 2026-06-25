@@ -18,7 +18,7 @@ const SKILLS = [
 export function SkillMarquee() {
   const items = [...SKILLS, ...SKILLS];
   return (
-    <div className="relative overflow-hidden border-y-2 border-foreground/10 bg-foreground py-5 text-background">
+    <div className="relative hidden overflow-hidden border-y-2 border-foreground/10 bg-foreground py-5 text-background md:block">
       <motion.div
         className="flex w-max gap-10 whitespace-nowrap"
         animate={{ x: [0, "-50%"] }}

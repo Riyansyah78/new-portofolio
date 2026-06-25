@@ -1,9 +1,11 @@
-import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, useLocation } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { useLocation } from "@tanstack/react-router";
+import { useLayoutEffect } from "react";
 import { Nav } from "@/components/site/nav";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useLenis } from "@/hooks/use-lenis";
 import { I18nProvider } from "@/lib/i18n";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -34,20 +36,30 @@ export const Route = createRootRoute({
 function RootComponent() {
   useLenis();
   const location = useLocation();
+  const isMobile = useIsMobile();
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
+
   return (
     <I18nProvider>
       <Nav />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={location.pathname}
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Outlet />
-        </motion.div>
-      </AnimatePresence>
+      {isMobile ? (
+        <Outlet />
+      ) : (
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
+      )}
     </I18nProvider>
   );
 }

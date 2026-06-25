@@ -31,9 +31,9 @@ function HomePage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden">
-      <section className="relative isolate min-h-screen pt-28 noise">
+      <section className="relative isolate min-h-screen pt-24 noise md:pt-28">
         <FloatingBlobs />
-        <div className="container mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-10 md:grid-cols-2 md:py-16">
+        <div className="container mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-8 md:grid-cols-2 md:py-16">
           <div className="relative z-10">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -45,7 +45,7 @@ function HomePage() {
               {t("home.badge")}
             </motion.div>
 
-            <h1 className="font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl lg:text-8xl">
+            <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-7xl lg:text-8xl">
               {words.map((w, i) => (
                 <motion.span
                   key={i}
@@ -68,9 +68,9 @@ function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
-              className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl"
+              className="mt-6 max-w-xl text-base text-muted-foreground md:text-xl"
             >
-              {t("home.desc")}{" "}
+              {t("home.desc")} {" "}
               <span className="font-semibold text-foreground">{t("home.alive")}</span>.
             </motion.p>
 
@@ -105,7 +105,7 @@ function HomePage() {
             </motion.div>
           </div>
 
-          <div className="relative h-[520px] w-full md:h-[640px]">
+          <div className="relative h-[360px] w-full md:h-[640px]">
             <LanyardClient />
           </div>
         </div>

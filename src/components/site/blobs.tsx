@@ -1,6 +1,6 @@
 export function FloatingBlobs() {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden hidden md:block">
       <div
         className="absolute -top-24 -left-24 h-[420px] w-[420px] animate-blob bg-gradient-warm opacity-60 blur-3xl"
         style={{ animationDelay: "0s" }}

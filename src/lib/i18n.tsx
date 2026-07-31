@@ -15,19 +15,19 @@ const translations: Translations = {
   // Home hero
   "home.badge": { en: "Available for freelance", id: "Tersedia untuk freelance" },
   "home.words": {
-    en: "Hi, I'm Riyansyah — I build delightful things.",
-    id: "Hai, Saya Riyansyah — Saya membuat hal-hal menakjubkan.",
+    en: "Hi, I'm Riyansyah I build delightful things.",
+    id: "Hai, Saya Riyansyah Saya membuat hal-hal menakjubkan.",
   },
   "home.desc": {
-    en: "Full-stack developer with 3+ years of shipping playful, performant products. I love Javascript, weird CSS, and making the web feel",
-    id: "Full-stack developer dengan 3+ tahun pengalaman membangun produk yang menyenangkan dan berperforma tinggi. Saya suka Javascript, CSS yang unik, dan membuat web terasa",
+    en: "Full-stack developer with 4+ years of shipping playful, performant products. I love Javascript, weird CSS, and making the web feel",
+    id: "Full-stack developer dengan 4+ tahun pengalaman membangun produk yang menyenangkan dan berperforma tinggi. Saya suka Javascript, CSS yang unik, dan membuat web terasa",
   },
   "home.alive": { en: "alive", id: "hidup" },
   "home.seeWork": { en: "See my work →", id: "Lihat karya saya →" },
-  "home.sayHi": { en: "Say hi 👋", id: "Halo 👋" },
+  "home.sayHi": { en: "Say hi", id: "Halo" },
   "home.dragHint": {
-    en: "Try dragging the card — it swings like a real lanyard.",
-    id: "Coba tarik kartunya — bergoyang seperti lanyard asli.",
+    en: "Try dragging the card it swings like a real lanyard.",
+    id: "Coba tarik kartunya bergoyang seperti lanyard asli.",
   },
   "home.aboutMe": { en: "About me", id: "Tentang saya" },
   "home.projects": { en: "Projects", id: "Proyek" },
@@ -88,8 +88,8 @@ const translations: Translations = {
   "contact.title": { en: "Let's", id: "Mari" },
   "contact.chat": { en: "chat", id: "ngobrol" },
   "contact.subtitle": {
-    en: "Got a wild idea, a small bug, or just want to nerd out about CSS? Drop a message — I usually reply within a day.",
-    id: "Punya ide liar, bug kecil, atau cuma mau ngobrolin CSS? Kirim pesan — saya biasanya balas dalam sehari.",
+    en: "Got a wild idea, a small bug, or just want to nerd out about CSS? Drop a message I usually reply within a day.",
+    id: "Punya ide liar, bug kecil, atau cuma mau ngobrolin CSS? Kirim pesan saya biasanya balas dalam sehari.",
   },
   "contact.yourName": { en: "Your name", id: "Nama kamu" },
   "contact.email": { en: "Email", id: "Email" },
@@ -101,7 +101,7 @@ const translations: Translations = {
     id: "Ceritakan tentang proyekmu...",
   },
   "contact.send": { en: "Send message →", id: "Kirim pesan →" },
-  "contact.sent": { en: "Sent! 🎉 Talk soon.", id: "Terkirim! 🎉 Sampai jumpa." },
+  "contact.sent": { en: "Sent! Talk soon.", id: "Terkirim! Sampai jumpa." },
   "contact.findMe": { en: "Or find me on", id: "Atau temukan saya di" },
 
   // 404

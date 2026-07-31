@@ -4,17 +4,18 @@ import { LanyardClient } from "@/components/site/lanyard-client";
 import { FloatingBlobs } from "@/components/site/blobs";
 import { SkillMarquee } from "@/components/site/marquee";
 import { useI18n } from "@/lib/i18n";
+import { IconHandPoint } from "@/components/ui/icons";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Riyansyah - I build delightful things" },
+      { title: "Riyansyah  I build delightful things" },
       {
         name: "description",
         content:
-          "Hi, I'm Riyansyah — a developer crafting playful, performant web experiences. Drag the lanyard to say hi.",
+          "Hi, I'm Riyansyah a developer crafting playful, performant web experiences. Drag the lanyard to say hi.",
       },
-      { property: "og:title", content: "Riyansyah — I build delightful things" },
+      { property: "og:title", content: "Riyansyah I build delightful things" },
       {
         property: "og:description",
         content: "Playful, interactive developer portfolio with a draggable 3D business card.",
@@ -100,7 +101,7 @@ function HomePage() {
               transition={{ delay: 1.4 }}
               className="mt-10 hidden items-center gap-2 text-sm text-muted-foreground md:flex"
             >
-              <span className="text-2xl animate-bounce-soft">👉</span>
+              <IconHandPoint className="h-6 w-6 animate-bounce-soft text-muted-foreground" />
               {t("home.dragHint")}
             </motion.div>
           </div>

@@ -1,19 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { FloatingBlobs } from "@/components/site/blobs";
 import { useI18n } from "@/lib/i18n";
+import {
+  IconTwitter,
+  IconGitHub,
+  IconDiscord,
+  IconDiamond,
+  IconMail,
+  IconRocket,
+  IconParty,
+  IconStar,
+  IconWave,
+} from "@/components/ui/icons";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Say hi to Riyansyah" },
+      { title: "Contact Say hi to Riyansyah" },
       {
         name: "description",
         content:
           "Get in touch with Riyansyah. Available for freelance, collaborations, and a good chat.",
       },
-      { property: "og:title", content: "Contact — Riyansyah" },
+      { property: "og:title", content: "Contact Riyansyah" },
       {
         property: "og:description",
         content: "Reach out for projects, collabs, or just to say hi.",
@@ -23,24 +34,24 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const socials = [
+const socials: { name: string; href: string; color: string; icon: ReactNode }[] = [
   {
     name: "X",
     href: "https://x.com/rynn_iam",
     color: "bg-foreground text-background",
-    emoji: "🐦",
+    icon: <IconTwitter className="h-7 w-7" />,
   },
   {
     name: "GitHub",
     href: "https://github.com/Riyansyah78",
     color: "bg-foreground text-background",
-    emoji: "🐙",
+    icon: <IconGitHub className="h-7 w-7" />,
   },
   {
     name: "Discord",
     href: "https://discord.com/users/514809747057278977",
     color: "bg-purple text-white",
-    emoji: "🎮",
+    icon: <IconDiscord className="h-7 w-7" />,
   },
 ];
 
@@ -99,18 +110,25 @@ function ContactPage() {
   return (
     <main className="relative min-h-screen overflow-hidden pt-28 noise">
       <FloatingBlobs />
-      {/* floating emoji */}
+      {/* floating icons */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        {["✦", "💌", "🚀", "🎉", "🌟", "👋"].map((e, i) => (
+        {[
+          <IconDiamond className="h-8 w-8 text-purple" />,
+          <IconMail className="h-8 w-8 text-pink" />,
+          <IconRocket className="h-8 w-8 text-orange" />,
+          <IconParty className="h-8 w-8 text-mint" />,
+          <IconStar className="h-8 w-8 text-yellow-400" />,
+          <IconWave className="h-8 w-8 text-purple" />,
+        ].map((icon, i) => (
           <motion.div
             key={i}
-            className="absolute text-4xl opacity-70"
+            className="absolute opacity-70"
             initial={{ y: 0 }}
             animate={{ y: [-10, 10, -10], rotate: [0, 8, -8, 0] }}
             transition={{ duration: 5 + i, repeat: Infinity, delay: i * 0.4 }}
             style={{ top: `${10 + i * 12}%`, left: `${(i * 17) % 90}%` }}
           >
-            {e}
+            {icon}
           </motion.div>
         ))}
       </div>
@@ -186,7 +204,7 @@ function ContactPage() {
                 whileHover={{ scale: 1.03, rotate: -1 }}
                 className={`flex items-center gap-4 rounded-3xl border-2 border-foreground ${s.color} p-5 shadow-card`}
               >
-                <span className="text-3xl group-hover:animate-wiggle">{s.emoji}</span>
+                <span className="text-3xl group-hover:animate-wiggle">{s.icon}</span>
                 <span className="font-display text-2xl font-bold">{s.name}</span>
                 <span className="ml-auto text-2xl">→</span>
               </motion.a>

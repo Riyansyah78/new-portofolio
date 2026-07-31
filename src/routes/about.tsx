@@ -11,7 +11,7 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "About Riyansyah: 3+ years building products with Javascript, React, Typescript, Node.js, and a love for playful UX.",
+          "About Riyansyah: 4+ years building products with Javascript, React, Typescript, Node.js, and a love for playful UX.",
       },
       { property: "og:title", content: "About - Riyansyah" },
       {
@@ -106,7 +106,7 @@ function AboutPage() {
         {/* Stats */}
         <div className="mt-20 grid grid-cols-2 gap-6 md:grid-cols-4">
           {[
-            { n: 3, s: "+", l: t("about.yearsBuilding") },
+            { n: 4, s: "+", l: t("about.yearsBuilding") },
             { n: 1, s: "", l: t("about.projectsShipped") },
             { n: 1, s: "", l: t("about.happyClients") },
             { n: 99, s: "%", l: t("about.caffeinated") },

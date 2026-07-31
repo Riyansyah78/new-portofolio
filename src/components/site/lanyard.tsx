@@ -320,14 +320,16 @@ function CardMesh() {
   );
 }
 
-function useCanvasTexture(draw: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {
+function useCanvasTexture(
+  draw: (ctx: CanvasRenderingContext2D, w: number, h: number, tex: THREE.CanvasTexture) => void
+) {
   const [tex] = useState(() => {
     const c = document.createElement("canvas");
     c.width = 512;
     c.height = 720;
     const ctx = c.getContext("2d")!;
-    draw(ctx, c.width, c.height);
     const t = new THREE.CanvasTexture(c);
+    draw(ctx, c.width, c.height, t);
     t.anisotropy = 8;
     t.colorSpace = THREE.SRGBColorSpace;
     return t;
@@ -335,7 +337,7 @@ function useCanvasTexture(draw: (ctx: CanvasRenderingContext2D, w: number, h: nu
   return tex;
 }
 
-function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number) {
+function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THREE.CanvasTexture) {
   // muted nonchalant gradient bg (bone → warm taupe)
   const g = ctx.createLinearGradient(0, 0, w, h);
   g.addColorStop(0, "#e8e1d6");
@@ -388,8 +390,40 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number) {
   ctx.fillStyle = "#5a544c";
   ctx.textAlign = "left";
   const x = 70;
-  ctx.fillText("✉  riyansyahanugrahprtm@gmail.com", x, 410);
-  ctx.fillText("📍 Majalengka, ID", x, 490);
+
+  // Mail icon (drawn via canvas path)
+  ctx.save();
+  ctx.translate(x, 397);
+  ctx.strokeStyle = "#5a544c";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, 18, 14, 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(9, 7);
+  ctx.lineTo(18, 0);
+  ctx.stroke();
+  ctx.restore();
+  ctx.fillText("riyansyahanugrahprtm@gmail.com", x + 26, 410);
+
+  // Map pin icon (drawn via canvas path)
+  ctx.save();
+  ctx.translate(x, 476);
+  ctx.fillStyle = "#5a544c";
+  ctx.beginPath();
+  ctx.moveTo(8, 18);
+  ctx.bezierCurveTo(8, 18, 0, 10, 0, 6);
+  ctx.arc(8, 6, 8, Math.PI, 0, false);
+  ctx.bezierCurveTo(16, 10, 8, 18, 8, 18);
+  ctx.fill();
+  ctx.fillStyle = "#f8f4ed";
+  ctx.beginPath();
+  ctx.arc(8, 6, 3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = "#5a544c";
+  ctx.fillText("Majalengka, ID", x + 24, 490);
 
   // socials row — muted monochrome
   const socials = ["GH", "DC", "X"];
@@ -418,43 +452,29 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number) {
   ctx.fillText("· developer · builder · whatever ·", w / 2, h - 30);
 }
 
-function drawBack(ctx: CanvasRenderingContext2D, w: number, h: number) {
+function drawBack(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THREE.CanvasTexture) {
   const g = ctx.createLinearGradient(0, 0, w, h);
   g.addColorStop(0, "#ede5d6");
   g.addColorStop(1, "#b89980");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
 
-  // QR-like grid
   const qrSize = 280;
   const qx = (w - qrSize) / 2;
   const qy = 140;
+
+  // Background box for QR code
   ctx.fillStyle = "#f8f4ed";
   roundRect(ctx, qx - 18, qy - 18, qrSize + 36, qrSize + 36, 24);
   ctx.fill();
-  const cell = qrSize / 21;
-  ctx.fillStyle = "#2a2520";
-  for (let i = 0; i < 21; i++) {
-    for (let j = 0; j < 21; j++) {
-      if (Math.random() > 0.55) {
-        ctx.fillRect(qx + i * cell, qy + j * cell, cell, cell);
-      }
-    }
-  }
-  // 3 finder squares
-  const finder = (fx: number, fy: number) => {
-    ctx.fillStyle = "#f8f4ed";
-    ctx.fillRect(fx, fy, cell * 7, cell * 7);
-    ctx.fillStyle = "#2a2520";
-    ctx.fillRect(fx, fy, cell * 7, cell * 7);
-    ctx.fillStyle = "#f8f4ed";
-    ctx.fillRect(fx + cell, fy + cell, cell * 5, cell * 5);
-    ctx.fillStyle = "#2a2520";
-    ctx.fillRect(fx + cell * 2, fy + cell * 2, cell * 3, cell * 3);
+
+  // Load actual QR code from public folder
+  const img = new Image();
+  img.src = "/qrcode_379962445_164ab35cab7811eb35b4b16e06896f15.svg";
+  img.onload = () => {
+    ctx.drawImage(img, qx, qy, qrSize, qrSize);
+    tex.needsUpdate = true;
   };
-  finder(qx, qy);
-  finder(qx + cell * 14, qy);
-  finder(qx, qy + cell * 14);
 
   // tagline
   ctx.fillStyle = "#2a2520";

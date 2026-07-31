@@ -32,6 +32,7 @@ type Project = {
   tech: string[];
   gradient: string;
   icon: ReactNode;
+  image?: string;
   demo?: string;
   repo?: string;
 };
@@ -45,6 +46,7 @@ const PROJECTS: Project[] = [
     tech: ["React", "Vite", "Tailwind CSS"],
     gradient: "bg-gradient-cool",
     icon: <IconFilm className="h-14 w-14" />,
+    image: "https://api.microlink.io/?url=https://film-organizer-nu.vercel.app&screenshot=true&meta=false&embed=screenshot.url",
     repo: "https://github.com/Riyansyah78/film-organizer-react",
     demo: "https://film-organizer-nu.vercel.app",
   },
@@ -56,6 +58,7 @@ const PROJECTS: Project[] = [
     tech: ["React", "Supabase", "Tailwind CSS", "Framer Motion"],
     gradient: "bg-gradient-warm",
     icon: <IconBook className="h-14 w-14" />,
+    image: "https://api.microlink.io/?url=https://pustaka-connect.vercel.app/&screenshot=true&meta=false&embed=screenshot.url",
     repo: "https://github.com/Riyansyah78/library-app",
     demo: "https://pustaka-connect.vercel.app/",
   },
@@ -67,6 +70,7 @@ const PROJECTS: Project[] = [
     tech: ["React", "Supabase", "Howler.js", "Zustand"],
     gradient: "bg-gradient-fun",
     icon: <IconMusic className="h-14 w-14" />,
+    image: "https://api.microlink.io/?url=https://soundcloud-clone-psi.vercel.app/&screenshot=true&meta=false&embed=screenshot.url",
     repo: "https://github.com/Riyansyah78/soundcloud-clone",
     demo: "https://soundcloud-clone-psi.vercel.app/",
   },
@@ -160,8 +164,16 @@ function ProjectsPage() {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-2xl overflow-hidden rounded-3xl border-2 border-foreground bg-card shadow-card"
             >
-              <div className={`flex h-56 items-center justify-center ${active.gradient} text-white`}>
-                {active.icon}
+              <div className={`relative flex h-56 items-center justify-center ${active.gradient} text-white`}>
+                {active.image ? (
+                  <img
+                    src={active.image}
+                    alt={active.title}
+                    className="absolute inset-0 h-full w-full object-cover opacity-90 transition-opacity hover:opacity-100"
+                  />
+                ) : (
+                  active.icon
+                )}
               </div>
               <div className="p-8">
                 <div className="text-xs font-semibold uppercase tracking-widest text-purple">
@@ -264,9 +276,19 @@ function ProjectCard({
       className="group relative overflow-hidden rounded-3xl border-2 border-foreground bg-card text-left shadow-card"
     >
       <div
-        className={`flex h-44 items-center justify-center ${p.gradient} text-white transition-transform duration-500 group-hover:scale-110`}
+        className={`relative flex h-44 items-center justify-center overflow-hidden ${p.gradient} text-white`}
       >
-        {p.icon}
+        {p.image ? (
+          <img
+            src={p.image}
+            alt={p.title}
+            className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-100"
+          />
+        ) : (
+          <div className="transition-transform duration-500 group-hover:scale-110">
+            {p.icon}
+          </div>
+        )}
       </div>
       <div className="p-5">
         <div className="text-xs font-semibold uppercase tracking-widest text-purple">

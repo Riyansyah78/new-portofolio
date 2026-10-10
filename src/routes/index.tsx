@@ -34,15 +34,8 @@ function HomePage() {
     <main className="relative min-h-screen overflow-hidden">
       <section className="relative isolate min-h-screen pt-24 noise md:pt-28">
         <FloatingBlobs />
-        {/* Desktop: lanyard floats on the right half, no bounding box */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-1/2 md:block">
-          <div className="pointer-events-auto h-full w-full">
-            <LanyardClient />
-          </div>
-        </div>
-
-        <div className="container relative z-10 mx-auto max-w-7xl px-6 py-8 md:py-16">
-          <div className="max-w-xl">
+        <div className="container mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-8 md:grid-cols-2 md:py-16">
+          <div className="relative z-10">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -113,8 +106,7 @@ function HomePage() {
             </motion.div>
           </div>
 
-          {/* Mobile: smaller contained lanyard below the text */}
-          <div className="relative mt-8 h-[380px] w-full md:hidden">
+          <div className="relative h-[360px] w-full md:h-[640px]">
             <LanyardClient />
           </div>
         </div>

@@ -34,8 +34,8 @@ function HomePage() {
     <main className="relative min-h-screen overflow-hidden">
       <section className="relative isolate min-h-screen pt-24 noise md:pt-28">
         <FloatingBlobs />
-        {/* Lanyard canvas — sits behind text, fills the entire section */}
-        <div className="pointer-events-none absolute inset-0 z-0 hidden md:block">
+        {/* Full-bleed 3D lanyard canvas — sits behind text, no bounding box */}
+        <div className="pointer-events-none absolute inset-0 z-0">
           <div className="pointer-events-auto h-full w-full">
             <LanyardClient />
           </div>
@@ -106,16 +106,11 @@ function HomePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4 }}
-              className="mt-10 hidden items-center gap-2 text-sm text-muted-foreground md:flex"
+              className="mt-10 flex items-center gap-2 text-sm text-muted-foreground"
             >
               <IconHandPoint className="h-6 w-6 animate-bounce-soft text-muted-foreground" />
               {t("home.dragHint")}
             </motion.div>
-          </div>
-
-          {/* Mobile fallback — inline since the absolute canvas is hidden on mobile */}
-          <div className="relative mt-8 h-[360px] w-full md:hidden">
-            <LanyardClient />
           </div>
         </div>
       </section>

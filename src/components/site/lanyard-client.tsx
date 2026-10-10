@@ -1,5 +1,4 @@
 import { useEffect, useState, type ComponentType } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 type LanyardProps = { onContextLost?: () => void };
 
@@ -32,8 +31,6 @@ export function LanyardClient() {
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    if (isMobile) return;
-
     let cancelled = false;
 
     // Detect WebGL support
@@ -58,9 +55,8 @@ export function LanyardClient() {
     return () => {
       cancelled = true;
     };
-  }, [isMobile]);
+  }, []);
 
-  if (isMobile) return <LanyardFallback />;
   if (failed) return <LanyardFallback />;
   if (!Comp) return <LanyardFallback />;
 

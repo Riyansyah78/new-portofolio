@@ -202,7 +202,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
 
   return (
     <>
-      <group position={[0, 4, 0]}>
+      <group position={[2, 4, 0]}>
         {/* Left Chain */}
         <RigidBody position={[-0.5, 0, 0]} ref={fixedL} {...segmentProps} type="fixed" />
         <RigidBody position={[-0.5, -0.5, 0]} ref={j1L} {...segmentProps}>

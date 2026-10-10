@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-27T12:00:00.000Z",
+  "title": "Design System: Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Deep Ink",
+        "canonical": "oklch(0.28 0.015 60)"
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Warm Bone",
+        "canonical": "oklch(0.965 0.008 75)"
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headlines and major sections." },
+      "body": { "displayName": "Body", "purpose": "Readable prose." }
+    },
+    "shadows": [
+      {
+        "name": "Pop Shadow",
+        "value": "0 20px 50px -25px oklch(0.22 0.01 60 / 0.25)",
+        "purpose": "Diffuse glow for floating elements."
+      },
+      {
+        "name": "Card Shadow",
+        "value": "6px 6px 0 0 oklch(0.22 0.01 60 / 0.9)",
+        "purpose": "Hard offset for playful elements."
+      }
+    ],
+    "motion": [
+      {
+        "name": "bounce-soft",
+        "value": "2s ease-in-out infinite",
+        "purpose": "Playful floating animation."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary call to action.",
+      "html": "<button class=\"ds-btn-primary\">View Projects</button>",
+      "css": ".ds-btn-primary { background: oklch(0.28 0.015 60); color: oklch(0.97 0.008 75); padding: 0.5rem 1rem; border-radius: calc(1.25rem - 2px); border: none; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; transition: transform 0.2s, background 0.2s; } .ds-btn-primary:hover { transform: scale(0.98); background: oklch(0.2 0.01 60); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Playful Creator",
+    "overview": "The design system for this portfolio embraces a playful, interactive, and colorful aesthetic. It rejects the dry, generic SaaS template look in favor of memorable interactions, warm gradients, and distinctive typography. The goal is to show personality and capability simultaneously, leaving a lasting impression on recruiters and potential clients.",
+    "keyCharacteristics": [
+      "Warm, off-white bone/paper backgrounds.",
+      "Vibrant, playful gradients (pink->purple, orange->yellow, cyan->blue).",
+      "High-contrast typography with a distinctive display font.",
+      "Soft, bouncy animations that feel alive but not overwhelming."
+    ],
+    "rules": [
+      {
+        "name": "The Not-A-SaaS Rule",
+        "body": "Avoid generic, flat blue-on-white combinations. Embrace the warm, muted brand colors and playful gradients to stand out.",
+        "section": "colors"
+      },
+      {
+        "name": "The Let The Type Speak Rule",
+        "body": "Use large, confident display typography for headers rather than relying on small, uppercase, tracked-out 'eyebrows' (like 'ABOUT ME' over every section).",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do use playful interactions (wiggle, soft bounce) to reward user engagement.",
+      "Do maintain high contrast for readability, especially with the deep ink text on warm bone backgrounds.",
+      "Do let the content (projects, code snippets) be the hero, using design to frame it nicely."
+    ],
+    "donts": [
+      "Don't use standard, generic SaaS templates or layouts (boring whites/grays).",
+      "Don't over-animate to the point of distraction; animations should be purposeful and delightful, not chaotic.",
+      "Don't use the 2023-era kicker (tiny uppercase tracked eyebrow above every section)."
+    ]
+  }
+}

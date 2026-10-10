@@ -1,0 +1,6 @@
+{
+  "files": ["src/**/*.tsx"],
+  "insertBefore": "</body>",
+  "commentSyntax": "{/* %CODE% */}",
+  "cspChecked": true
+}

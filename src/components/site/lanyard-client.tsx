@@ -26,7 +26,6 @@ function LanyardFallback() {
 }
 
 export function LanyardClient() {
-  const isMobile = useIsMobile();
   const [Comp, setComp] = useState<ComponentType<LanyardProps> | null>(null);
   const [failed, setFailed] = useState(false);
 

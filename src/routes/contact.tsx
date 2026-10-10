@@ -73,23 +73,12 @@ function ContactPage() {
     };
 
     try {
-      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          service_id: "service_lxy2z4t",
-          template_id: "template_4rc08m4",
-          user_id: "7BKGd0IhDJLnAYGfd",
-          template_params: {
-            from_name: data.name,
-            from_email: data.email,
-            reply_to: data.email,
-            message: data.message,
-            to_name: "Riyansyah",
-          },
-        }),
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {

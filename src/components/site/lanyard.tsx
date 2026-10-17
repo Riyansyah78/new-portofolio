@@ -42,8 +42,8 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   const rot = new THREE.Vector3();
   const dir = new THREE.Vector3();
   // Clip is at y=1.2 in card-local, scaled by 1.15 → 1.38; offset by group y=-0.6
-  const localAttachL = new THREE.Vector3(-0.06, 0.78, 0);
-  const localAttachR = new THREE.Vector3(0.06, 0.78, 0);
+  // Central swivel anchor at x=0 so continuous rotation does not twist straps
+  const localAttach = new THREE.Vector3(0, 0.78, 0);
 
   const segmentProps = {
     type: "dynamic" as const,
@@ -62,7 +62,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   useRopeJoint(j2L as any, j3L as any, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3L as any, card as any, [
     [0, 0, 0],
-    [-0.06, 0.78, 0],
+    [0, 0.78, 0],
   ]);
 
   // Right chain
@@ -71,7 +71,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   useRopeJoint(j2R as any, j3R as any, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3R as any, card as any, [
     [0, 0, 0],
-    [0.06, 0.78, 0],
+    [0, 0.78, 0],
   ]);
 
   useEffect(() => {
@@ -150,20 +150,14 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
         );
       });
 
-      curveL.points[0]
-        .copy(localAttachL)
-        .applyQuaternion(card.current.rotation() as any)
-        .add(card.current.translation() as any);
+      curveL.points[0].copy(localAttach).add(card.current.translation() as any);
       // @ts-ignore
       curveL.points[1].copy(j2L.current.lerped);
       // @ts-ignore
       curveL.points[2].copy(j1L.current.lerped);
       curveL.points[3].copy(fixedL.current.translation());
 
-      curveR.points[0]
-        .copy(localAttachR)
-        .applyQuaternion(card.current.rotation() as any)
-        .add(card.current.translation() as any);
+      curveR.points[0].copy(localAttach).add(card.current.translation() as any);
       // @ts-ignore
       curveR.points[1].copy(j2R.current.lerped);
       // @ts-ignore
@@ -185,8 +179,17 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
       oldGeoR?.dispose();
 
       ang.copy(card.current.angvel());
-      rot.copy(card.current.rotation() as any);
-      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z }, true);
+      let targetAngvelY = 0.6;
+      if (dragged) {
+        targetAngvelY = ang.y;
+      } else {
+        // Maintain smooth, constant showcase spin speed without unbounded acceleration
+        targetAngvelY = THREE.MathUtils.lerp(ang.y, 0.6, Math.min(1, delta * 3));
+        card.current.wakeUp();
+      }
+      const targetAngvelX = THREE.MathUtils.lerp(ang.x, 0, Math.min(1, delta * 4));
+      const targetAngvelZ = THREE.MathUtils.lerp(ang.z, 0, Math.min(1, delta * 4));
+      card.current.setAngvel({ x: targetAngvelX, y: targetAngvelY, z: targetAngvelZ }, true);
     }
   });
 

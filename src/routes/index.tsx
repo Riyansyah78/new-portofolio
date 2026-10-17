@@ -43,8 +43,8 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="container relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-8 md:grid-cols-2 md:py-16">
-          <div className="relative z-10">
+        <div className="container pointer-events-none relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-8 md:grid-cols-2 md:py-16">
+          <div className="pointer-events-auto relative z-10">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -55,7 +55,7 @@ function HomePage() {
               {t("home.badge")}
             </motion.div>
 
-            <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-7xl lg:text-8xl">
+            <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-tight md:text-5xl lg:text-6xl">
               {words.map((w, i) => (
                 <motion.span
                   key={i}
@@ -116,7 +116,7 @@ function HomePage() {
           </div>
 
           {/* Mobile: boxed layout (fallback card shown here) */}
-          <div className="relative h-[360px] w-full md:hidden">
+          <div className="pointer-events-auto relative h-[360px] w-full md:hidden">
             <LanyardClient />
           </div>
 

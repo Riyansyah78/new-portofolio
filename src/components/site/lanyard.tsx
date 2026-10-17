@@ -41,8 +41,9 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   const ang = new THREE.Vector3();
   const rot = new THREE.Vector3();
   const dir = new THREE.Vector3();
-  const localAttachL = new THREE.Vector3(-0.06, 1.45, 0);
-  const localAttachR = new THREE.Vector3(0.06, 1.45, 0);
+  // Clip is at y=1.2 in card-local, scaled by 1.15 → 1.38; offset by group y=-0.6
+  const localAttachL = new THREE.Vector3(-0.06, 0.78, 0);
+  const localAttachR = new THREE.Vector3(0.06, 0.78, 0);
 
   const segmentProps = {
     type: "dynamic" as const,
@@ -61,7 +62,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   useRopeJoint(j2L as any, j3L as any, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3L as any, card as any, [
     [0, 0, 0],
-    [-0.06, 1.45, 0],
+    [-0.06, 0.78, 0],
   ]);
 
   // Right chain
@@ -70,7 +71,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   useRopeJoint(j2R as any, j3R as any, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3R as any, card as any, [
     [0, 0, 0],
-    [0.06, 1.45, 0],
+    [0.06, 0.78, 0],
   ]);
 
   useEffect(() => {
@@ -233,10 +234,10 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
           {...segmentProps}
           type={dragged ? "kinematicPosition" : "dynamic"}
         >
-          <CuboidCollider args={[0.8, 1.125, 0.01]} />
+          <CuboidCollider args={[0.92, 1.29, 0.01]} position={[0, -0.6, -0.03]} />
           <group
-            scale={2.25}
-            position={[0, -1.2, -0.05]}
+            scale={1.15}
+            position={[0, -0.6, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
             onPointerUp={(e: any) => {
@@ -470,7 +471,7 @@ function drawBack(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THRE
 
   // Load actual QR code from public folder
   const img = new Image();
-  img.src = "/qrcode_379962445_164ab35cab7811eb35b4b16e06896f15.svg";
+  img.src = "/cv-qr.png";
   img.onload = () => {
     ctx.drawImage(img, qx, qy, qrSize, qrSize);
     tex.needsUpdate = true;
@@ -480,12 +481,12 @@ function drawBack(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THRE
   ctx.fillStyle = "#2a2520";
   ctx.textAlign = "center";
   ctx.font = "bold 36px system-ui";
-  ctx.fillText("scan, i guess.", w / 2, h - 140);
+  ctx.fillText("scan to get my cv", w / 2, h - 140);
   ctx.font = "500 22px system-ui";
-  ctx.fillText("i make things sometimes", w / 2, h - 100);
+  ctx.fillText("Riyansyah Anugrah Pratama", w / 2, h - 100);
   ctx.font = "italic 18px system-ui";
   ctx.fillStyle = "#6b4a35";
-  ctx.fillText("— code, coffee, the usual", w / 2, h - 70);
+  ctx.fillText("— full-stack developer", w / 2, h - 70);
 }
 
 function roundRect(
@@ -508,7 +509,8 @@ function roundRect(
 export function Lanyard3D({ onContextLost }: { onContextLost?: () => void }) {
   return (
     <Canvas
-      camera={{ position: [0, 0, 13], fov: 25 }}
+      style={{ touchAction: "none" }}
+      camera={{ position: [0, 0, 9], fov: 25 }}
       gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
       dpr={[1, 1.5]}
       onCreated={({ gl }) => {

@@ -49,8 +49,8 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
     type: "dynamic" as const,
     canSleep: true,
     colliders: false as const,
-    angularDamping: 2,
-    linearDamping: 2,
+    angularDamping: 4,
+    linearDamping: 4,
   };
 
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
@@ -186,15 +186,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
 
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation() as any);
-      let targetAngvelY = ang.y;
-      if (dragged) {
-        targetAngvelY = ang.y - rot.y * 0.25;
-      } else {
-        targetAngvelY = ang.y + 0.02;
-        card.current.wakeUp();
-      }
-
-      card.current.setAngvel({ x: ang.x, y: targetAngvelY, z: ang.z }, true);
+      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z }, true);
     }
   });
 
@@ -322,7 +314,7 @@ function CardMesh() {
 }
 
 function useCanvasTexture(
-  draw: (ctx: CanvasRenderingContext2D, w: number, h: number, tex: THREE.CanvasTexture) => void
+  draw: (ctx: CanvasRenderingContext2D, w: number, h: number, tex: THREE.CanvasTexture) => void,
 ) {
   const [tex] = useState(() => {
     const c = document.createElement("canvas");

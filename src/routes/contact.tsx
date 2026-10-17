@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState, type FormEvent, type ReactNode } from "react";
-import { FloatingBlobs } from "@/components/site/blobs";
 import { useI18n } from "@/lib/i18n";
 import {
   IconTwitter,
@@ -98,7 +97,6 @@ function ContactPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden pt-28 noise">
-      <FloatingBlobs />
       {/* floating icons */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         {[

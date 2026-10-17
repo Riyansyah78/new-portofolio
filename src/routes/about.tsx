@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
-import { FloatingBlobs } from "@/components/site/blobs";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/about")({
@@ -78,7 +77,6 @@ function AboutPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden pt-28 noise">
-      <FloatingBlobs />
       <div className="container relative mx-auto max-w-5xl px-6 py-12">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}

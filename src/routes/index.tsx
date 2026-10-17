@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { LanyardClient } from "@/components/site/lanyard-client";
-import { FloatingBlobs } from "@/components/site/blobs";
 import { SkillMarquee } from "@/components/site/marquee";
 import { useI18n } from "@/lib/i18n";
 import { IconHandPoint } from "@/components/ui/icons";
@@ -33,7 +32,6 @@ function HomePage() {
   return (
     <main className="relative min-h-screen overflow-hidden">
       <section className="relative isolate min-h-screen pt-24 noise md:pt-28">
-        <FloatingBlobs />
         {/* Desktop: full-bleed canvas so the card can be dragged anywhere without clipping.
             The 3D camera keeps the card visually on the right. pointer-events-none lets
             clicks fall through to the text; the inner wrapper re-enables them on the canvas. */}
@@ -80,7 +78,7 @@ function HomePage() {
               transition={{ delay: 0.9 }}
               className="mt-6 max-w-xl text-base text-muted-foreground md:text-xl"
             >
-              {t("home.desc")} {" "}
+              {t("home.desc")}{" "}
               <span className="font-semibold text-foreground">{t("home.alive")}</span>.
             </motion.p>
 

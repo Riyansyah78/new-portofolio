@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState, type MouseEvent, type ReactNode } from "react";
-import { FloatingBlobs } from "@/components/site/blobs";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useI18n } from "@/lib/i18n";
 import { IconFilm, IconBook, IconMusic } from "@/components/ui/icons";
@@ -46,7 +45,8 @@ const PROJECTS: Project[] = [
     tech: ["React", "Vite", "Tailwind CSS"],
     gradient: "bg-gradient-cool",
     icon: <IconFilm className="h-14 w-14" />,
-    image: "https://api.microlink.io/?url=https://film-organizer-nu.vercel.app&screenshot=true&meta=false&embed=screenshot.url",
+    image:
+      "https://api.microlink.io/?url=https://film-organizer-nu.vercel.app&screenshot=true&meta=false&embed=screenshot.url",
     repo: "https://github.com/Riyansyah78/film-organizer-react",
     demo: "https://film-organizer-nu.vercel.app",
   },
@@ -58,7 +58,8 @@ const PROJECTS: Project[] = [
     tech: ["React", "Supabase", "Tailwind CSS", "Framer Motion"],
     gradient: "bg-gradient-warm",
     icon: <IconBook className="h-14 w-14" />,
-    image: "https://api.microlink.io/?url=https://pustaka-connect.vercel.app/&screenshot=true&meta=false&embed=screenshot.url",
+    image:
+      "https://api.microlink.io/?url=https://pustaka-connect.vercel.app/&screenshot=true&meta=false&embed=screenshot.url",
     repo: "https://github.com/Riyansyah78/library-app",
     demo: "https://pustaka-connect.vercel.app/",
   },
@@ -70,7 +71,8 @@ const PROJECTS: Project[] = [
     tech: ["React", "Supabase", "Howler.js", "Zustand"],
     gradient: "bg-gradient-fun",
     icon: <IconMusic className="h-14 w-14" />,
-    image: "https://api.microlink.io/?url=https://soundcloud-clone-psi.vercel.app/&screenshot=true&meta=false&embed=screenshot.url",
+    image:
+      "https://api.microlink.io/?url=https://soundcloud-clone-psi.vercel.app/&screenshot=true&meta=false&embed=screenshot.url",
     repo: "https://github.com/Riyansyah78/soundcloud-clone",
     demo: "https://soundcloud-clone-psi.vercel.app/",
   },
@@ -98,7 +100,6 @@ function ProjectsPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden pt-28 noise">
-      <FloatingBlobs />
       <div className="container relative mx-auto max-w-7xl px-6 py-12">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -140,7 +141,13 @@ function ProjectsPage() {
         <motion.div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout" initial={false}>
             {visible.map((p, i) => (
-              <ProjectCard key={p.title} p={p} index={i} onClick={() => setActive(p)} disableTilt={isMobile} />
+              <ProjectCard
+                key={p.title}
+                p={p}
+                index={i}
+                onClick={() => setActive(p)}
+                disableTilt={isMobile}
+              />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -164,7 +171,9 @@ function ProjectsPage() {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-2xl overflow-hidden rounded-3xl border-2 border-foreground bg-card shadow-card"
             >
-              <div className={`relative flex h-56 items-center justify-center ${active.gradient} text-white`}>
+              <div
+                className={`relative flex h-56 items-center justify-center ${active.gradient} text-white`}
+              >
                 {active.image ? (
                   <img
                     src={active.image}
@@ -285,9 +294,7 @@ function ProjectCard({
             className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-100"
           />
         ) : (
-          <div className="transition-transform duration-500 group-hover:scale-110">
-            {p.icon}
-          </div>
+          <div className="transition-transform duration-500 group-hover:scale-110">{p.icon}</div>
         )}
       </div>
       <div className="p-5">

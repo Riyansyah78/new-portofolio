@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, useLocation } from "@tanstack/react-rout
 import { AnimatePresence, motion } from "framer-motion";
 import { useLayoutEffect } from "react";
 import { Nav } from "@/components/site/nav";
+import { FluidBackground } from "@/components/site/blobs";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLenis } from "@/hooks/use-lenis";
 import { I18nProvider } from "@/lib/i18n";
@@ -44,6 +45,7 @@ function RootComponent() {
 
   return (
     <I18nProvider>
+      <FluidBackground />
       <Nav />
       {isMobile ? (
         <Outlet />

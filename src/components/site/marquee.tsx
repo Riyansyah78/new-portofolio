@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 const SKILLS = [
   "JavaScript",
   "TypeScript",
@@ -18,12 +16,8 @@ const SKILLS = [
 export function SkillMarquee() {
   const items = [...SKILLS, ...SKILLS];
   return (
-    <div className="relative hidden overflow-hidden border-y-2 border-foreground/10 bg-foreground py-5 text-background md:block">
-      <motion.div
-        className="flex w-max gap-10 whitespace-nowrap"
-        animate={{ x: [0, "-50%"] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      >
+    <div className="relative overflow-hidden border-y-2 border-foreground/10 bg-foreground py-5 text-background">
+      <div className="flex w-max animate-marquee gap-10 whitespace-nowrap">
         {items.map((s, i) => (
           <span
             key={i}
@@ -33,7 +27,7 @@ export function SkillMarquee() {
             <span className="text-3xl">✦</span>
           </span>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

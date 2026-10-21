@@ -13,21 +13,24 @@ const translations: Translations = {
   "nav.contact": { en: "Contact", id: "Kontak" },
 
   // Home hero
-  "home.badge": { en: "Available for freelance", id: "Tersedia untuk freelance" },
+  "home.badge": {
+    en: "Available for freelance & full-time",
+    id: "Tersedia untuk freelance & full-time",
+  },
   "home.words": {
-    en: "Hi, I'm Riyansyah I build delightful things.",
-    id: "Hai, Saya Riyansyah Saya membuat hal-hal menakjubkan.",
+    en: "Hi, I'm Riyansyah Building modern web apps.",
+    id: "Hai, Saya Riyansyah Membangun aplikasi web modern.",
   },
   "home.desc": {
-    en: "Full-stack developer with 4+ years of shipping playful, performant products. I love Javascript, weird CSS, and making the web feel",
-    id: "Full-stack developer dengan 4+ tahun pengalaman membangun produk yang menyenangkan dan berperforma tinggi. Saya suka Javascript, CSS yang unik, dan membuat web terasa",
+    en: "Full-stack engineer specializing in React, TypeScript, and high-performance interactive interfaces. Focused on clean architecture, fluid motion, and products that",
+    id: "Full-stack engineer dengan fokus pada React, TypeScript, dan antarmuka interaktif berperforma tinggi. Menekankan arsitektur bersih, animasi mulus, dan produk yang",
   },
-  "home.alive": { en: "alive", id: "hidup" },
-  "home.seeWork": { en: "See my work →", id: "Lihat karya saya →" },
-  "home.sayHi": { en: "Say hi", id: "Halo" },
+  "home.alive": { en: "actually deliver", id: "benar-benar terukur" },
+  "home.seeWork": { en: "See my work", id: "Lihat karya saya" },
+  "home.sayHi": { en: "Get in touch", id: "Hubungi saya" },
   "home.dragHint": {
-    en: "Try dragging the card it swings like a real lanyard.",
-    id: "Coba tarik kartunya bergoyang seperti lanyard asli.",
+    en: "Interactive physics badge grab and drag the card.",
+    id: "Badge fisika interaktif tarik dan ayunkan kartunya.",
   },
   "home.aboutMe": { en: "About me", id: "Tentang saya" },
   "home.projects": { en: "Projects", id: "Proyek" },
@@ -36,8 +39,8 @@ const translations: Translations = {
   "about.title": { en: "About", id: "Tentang" },
   "about.me": { en: "me", id: "saya" },
   "about.intro": {
-    en: "I'm a full-stack developer based in Majalengka. I turn fuzzy product ideas into shippable, delightful interfaces - the kind that make users smile, then come back.",
-    id: "Saya seorang full-stack developer berbasis di Majalengka. Saya mengubah ide produk yang samar menjadi antarmuka yang siap kirim dan menyenangkan - yang membuat pengguna tersenyum, lalu kembali lagi.",
+    en: "Full-stack engineer based in Majalengka, Indonesia. I design and build end-to-end web applications from database schemas to interactive 3D frontends, balancing rock-solid architecture with fast, intuitive user experiences.",
+    id: "Full-stack engineer berbasis di Majalengka, Indonesia. Saya merancang dan membangun aplikasi web end-to-end dari skema basis data hingga frontend 3D interaktif, menyeimbangkan arsitektur yang kokoh dengan pengalaman pengguna yang cepat dan intuitif.",
   },
   "about.yearsBuilding": { en: "Years building", id: "Tahun membangun" },
   "about.projectsShipped": { en: "Projects shipped", id: "Proyek terkirim" },
@@ -50,28 +53,28 @@ const translations: Translations = {
 
   // Projects
   "projects.filmOrganizer.desc": {
-    en: "Minimalist movie tracking application built with React.",
-    id: "Aplikasi pelacak film minimalis yang dibangun dengan React.",
+    en: "Personal cinema tracker with local watchlist state and movie metadata search.",
+    id: "Aplikasi pelacak film personal dengan status watchlist lokal dan pencarian metadata film.",
   },
   "projects.filmOrganizer.long": {
-    en: "A React-based movie organizer that helps users keep track of films they want to watch, integrated with Vite for high performance and smooth UI.",
-    id: "Pengatur film berbasis React yang membantu pengguna melacak film yang ingin mereka tonton, terintegrasi dengan Vite untuk performa tinggi dan UI yang mulus.",
+    en: "Built a responsive film catalog for organizing watchlists and logging watched movies. Implemented fast client-side filtering, debounced search against TMDB API, and responsive poster grid layouts.",
+    id: "Membangun katalog film responsif untuk mengatur daftar tontonan dan riwayat film. Mengimplementasikan pencarian ter-debounce dengan API TMDB, filter client-side instan, dan layout poster grid responsif.",
   },
   "projects.pustakaConnect.desc": {
-    en: "Modern digital library management system.",
-    id: "Sistem manajemen perpustakaan digital modern.",
+    en: "Full-stack library catalog with Supabase auth, real-time loans, and member reviews.",
+    id: "Katalog perpustakaan full-stack dengan autentikasi Supabase, peminjaman real-time, dan ulasan anggota.",
   },
   "projects.pustakaConnect.long": {
-    en: "A full-stack library management application with features for borrowing books, rating/reviews, and admin management for collections and users. Built with Supabase for real-time data.",
-    id: "Aplikasi manajemen perpustakaan full-stack dengan fitur peminjaman buku, rating/ulasan, dan manajemen admin untuk koleksi dan pengguna. Dibangun dengan Supabase untuk data real-time.",
+    en: "End-to-end circulation platform featuring role-based access (admin/member), Supabase PostgreSQL backend with Row-Level Security, real-time book loan tracking, and interactive community reviews.",
+    id: "Platform sirkulasi buku end-to-end dengan kontrol akses berbasis peran (admin/anggota), backend PostgreSQL Supabase dengan Row-Level Security, pelacakan peminjaman buku real-time, dan ulasan interaktif.",
   },
   "projects.soundcloudClone.desc": {
-    en: "Modern music streaming web application.",
-    id: "Aplikasi web streaming musik modern.",
+    en: "Audio streaming app featuring playlist management, track uploads, and Howler.js playback.",
+    id: "Aplikasi streaming audio dengan manajemen playlist, upload trek, dan playback audio Howler.js.",
   },
   "projects.soundcloudClone.long": {
-    en: "A music streaming platform that allows users to play music, create playlists, and upload songs. Features a full-featured audio player powered by Howler.js.",
-    id: "Platform streaming musik yang memungkinkan pengguna memutar musik, membuat playlist, dan mengunggah lagu. Memiliki pemutar audio lengkap yang didukung oleh Howler.js.",
+    en: "Full-featured audio platform utilizing Howler.js for seamless playback, timeline scrubbing, and persistent audio state across page transitions managed via Zustand. Backed by Supabase storage for track uploads.",
+    id: "Platform streaming audio interaktif menggunakan Howler.js untuk playback audio mulus, seekbar scrubbing, dan state audio persisten di seluruh navigasi halaman dengan Zustand, didukung penyimpanan Supabase.",
   },
   "projects.title": { en: "Selected", id: "Karya" },
   "projects.work": { en: "work", id: "pilihan" },
@@ -100,7 +103,7 @@ const translations: Translations = {
     en: "Tell me about your project...",
     id: "Ceritakan tentang proyekmu...",
   },
-  "contact.send": { en: "Send message →", id: "Kirim pesan →" },
+  "contact.send": { en: "Send message", id: "Kirim pesan" },
   "contact.sent": { en: "Sent! Talk soon.", id: "Terkirim! Sampai jumpa." },
   "contact.findMe": { en: "Or find me on", id: "Atau temukan saya di" },
 

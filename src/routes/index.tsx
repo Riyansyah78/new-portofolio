@@ -65,7 +65,7 @@ function HomePage() {
                     stiffness: 120,
                     damping: 14,
                   }}
-                  className={`mr-3 inline-block ${i === words.length - 2 ? "text-gradient-fun" : ""} ${i === words.length - 1 ? "text-gradient-warm" : ""}`}
+                  className={`mr-3 inline-block ${i >= words.length - 2 ? "text-accent" : ""}`}
                 >
                   {w}
                 </motion.span>
@@ -142,13 +142,13 @@ function HomePage() {
           >
             <Link
               to="/about"
-              className="rounded-full bg-gradient-fun px-7 py-3 font-semibold text-white shadow-pop hover:scale-105 transition-transform"
+              className="rounded-full bg-foreground px-7 py-3 font-semibold text-background shadow-pop hover:scale-105 transition-transform"
             >
               {t("home.aboutMe")}
             </Link>
             <Link
               to="/projects"
-              className="rounded-full bg-gradient-cool px-7 py-3 font-semibold text-white shadow-pop hover:scale-105 transition-transform"
+              className="rounded-full border-2 border-foreground bg-background px-7 py-3 font-semibold text-foreground shadow-pop hover:scale-105 transition-transform"
             >
               {t("home.projects")}
             </Link>

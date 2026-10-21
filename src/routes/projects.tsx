@@ -106,7 +106,7 @@ function ProjectsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="font-display text-5xl font-bold md:text-7xl"
         >
-          {t("projects.title")} <span className="text-gradient-warm">{t("projects.work")}</span>
+          {t("projects.title")} <span className="text-accent">{t("projects.work")}</span>
         </motion.h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("projects.subtitle")}</p>
 
@@ -212,7 +212,7 @@ function ProjectsPage() {
                       href={active.demo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-full bg-gradient-fun px-5 py-2.5 text-sm font-semibold text-white shadow-pop"
+                      className="rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow-pop hover:scale-105 transition-transform"
                     >
                       {t("projects.liveDemo")}
                     </a>

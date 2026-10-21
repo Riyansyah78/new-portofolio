@@ -33,12 +33,12 @@ export function Nav() {
               {active && (
                 <motion.span
                   layoutId="nav-pill"
-                  className="absolute inset-0 rounded-full bg-gradient-fun"
+                  className="absolute inset-0 rounded-full bg-foreground"
                   transition={{ type: "spring", stiffness: 300, damping: 28 }}
                 />
               )}
               <span
-                className={`relative z-10 ${active ? "text-white" : "text-foreground/80 hover:text-foreground"}`}
+                className={`relative z-10 ${active ? "text-background" : "text-foreground/80 hover:text-foreground"}`}
               >
                 {l.label}
               </span>

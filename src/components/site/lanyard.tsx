@@ -27,23 +27,15 @@ declare module "@react-three/fiber" {
 function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: number }) {
   const bandL = useRef<THREE.Mesh>(null);
   const bandR = useRef<THREE.Mesh>(null);
-  const fixedL = useRef<RapierRigidBody>(null);
-  const j1L = useRef<RapierRigidBody>(null);
-  const j2L = useRef<RapierRigidBody>(null);
-  const j3L = useRef<RapierRigidBody>(null);
-  const fixedR = useRef<RapierRigidBody>(null);
-  const j1R = useRef<RapierRigidBody>(null);
-  const j2R = useRef<RapierRigidBody>(null);
-  const j3R = useRef<RapierRigidBody>(null);
+  const fixed = useRef<RapierRigidBody>(null);
+  const j1 = useRef<RapierRigidBody>(null);
+  const j2 = useRef<RapierRigidBody>(null);
+  const j3 = useRef<RapierRigidBody>(null);
   const card = useRef<RapierRigidBody>(null);
 
   const vec = new THREE.Vector3();
   const ang = new THREE.Vector3();
-  const rot = new THREE.Vector3();
   const dir = new THREE.Vector3();
-  // Clip is at y=1.2 in card-local, scaled by 1.15 → 1.38; offset by group y=-0.6
-  // Central swivel anchor at x=0 so continuous rotation does not twist straps
-  const localAttach = new THREE.Vector3(0, 0.78, 0);
 
   const segmentProps = {
     type: "dynamic" as const,
@@ -56,20 +48,11 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   const [dragged, drag] = useState<false | THREE.Vector3>(false);
   const [hovered, hover] = useState(false);
 
-  // Left chain
-  useRopeJoint(fixedL as any, j1L as any, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1L as any, j2L as any, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2L as any, j3L as any, [[0, 0, 0], [0, 0, 0], 1]);
-  useSphericalJoint(j3L as any, card as any, [
-    [0, 0, 0],
-    [0, 0.78, 0],
-  ]);
-
-  // Right chain
-  useRopeJoint(fixedR as any, j1R as any, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1R as any, j2R as any, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2R as any, j3R as any, [[0, 0, 0], [0, 0, 0], 1]);
-  useSphericalJoint(j3R as any, card as any, [
+  // Single central chain — stable Rapier constraints without joint fighting or twisted slack
+  useRopeJoint(fixed as any, j1 as any, [[0, 0, 0], [0, 0, 0], 1]);
+  useRopeJoint(j1 as any, j2 as any, [[0, 0, 0], [0, 0, 0], 1]);
+  useRopeJoint(j2 as any, j3 as any, [[0, 0, 0], [0, 0, 0], 1]);
+  useSphericalJoint(j3 as any, card as any, [
     [0, 0, 0],
     [0, 0.78, 0],
   ]);
@@ -117,7 +100,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
       dir.copy(vec).sub(state.camera.position).normalize();
       vec.add(dir.multiplyScalar(state.camera.position.length()));
-      [card, j1L, j2L, j3L, fixedL, j1R, j2R, j3R, fixedR].forEach((r) => r.current?.wakeUp());
+      [card, j1, j2, j3, fixed].forEach((r) => r.current?.wakeUp());
       card.current.setNextKinematicTranslation({
         x: vec.x - (dragged as THREE.Vector3).x,
         y: vec.y - (dragged as THREE.Vector3).y,
@@ -125,19 +108,15 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
       });
     }
     if (
-      fixedL.current &&
-      j1L.current &&
-      j2L.current &&
-      j3L.current &&
-      fixedR.current &&
-      j1R.current &&
-      j2R.current &&
-      j3R.current &&
+      fixed.current &&
+      j1.current &&
+      j2.current &&
+      j3.current &&
       card.current &&
       bandL.current &&
       bandR.current
     ) {
-      [j1L, j2L, j1R, j2R].forEach((ref) => {
+      [j1, j2].forEach((ref) => {
         const r = ref.current!;
         // @ts-ignore lerped is added at runtime
         if (!r.lerped) r.lerped = new THREE.Vector3().copy(r.translation());
@@ -150,19 +129,30 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
         );
       });
 
-      curveL.points[0].copy(localAttach).add(card.current.translation() as any);
+      const fixedPos = fixed.current.translation();
       // @ts-ignore
-      curveL.points[1].copy(j2L.current.lerped);
+      const j1Pos = j1.current.lerped ?? j1.current.translation();
       // @ts-ignore
-      curveL.points[2].copy(j1L.current.lerped);
-      curveL.points[3].copy(fixedL.current.translation());
+      const j2Pos = j2.current.lerped ?? j2.current.translation();
+      const cardPos = card.current.translation();
+      const cardRot = card.current.rotation();
+      const quat = new THREE.Quaternion(cardRot.x, cardRot.y, cardRot.z, cardRot.w);
 
-      curveR.points[0].copy(localAttach).add(card.current.translation() as any);
-      // @ts-ignore
-      curveR.points[1].copy(j2R.current.lerped);
-      // @ts-ignore
-      curveR.points[2].copy(j1R.current.lerped);
-      curveR.points[3].copy(fixedR.current.translation());
+      // Clip attachment points in card-local space, rotated to world
+      const clipL = new THREE.Vector3(-0.03, 0.78, 0).applyQuaternion(quat);
+      const clipR = new THREE.Vector3(0.03, 0.78, 0).applyQuaternion(quat);
+
+      // Left strap: hangs from top-left anchor into left side of clip
+      curveL.points[3].set(fixedPos.x - 0.55, fixedPos.y, fixedPos.z);
+      curveL.points[2].set(j1Pos.x - 0.35, j1Pos.y, j1Pos.z);
+      curveL.points[1].set(j2Pos.x - 0.15, j2Pos.y, j2Pos.z);
+      curveL.points[0].set(cardPos.x + clipL.x, cardPos.y + clipL.y, cardPos.z + clipL.z);
+
+      // Right strap: hangs from top-right anchor into right side of clip
+      curveR.points[3].set(fixedPos.x + 0.55, fixedPos.y, fixedPos.z);
+      curveR.points[2].set(j1Pos.x + 0.35, j1Pos.y, j1Pos.z);
+      curveR.points[1].set(j2Pos.x + 0.15, j2Pos.y, j2Pos.z);
+      curveR.points[0].set(cardPos.x + clipR.x, cardPos.y + clipR.y, cardPos.z + clipR.z);
 
       const oldGeoL = bandL.current.geometry;
       bandL.current.geometry = new THREE.ExtrudeGeometry(shape, {
@@ -199,27 +189,14 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   return (
     <>
       <group position={[2, 4, 0]}>
-        {/* Left Chain */}
-        <RigidBody position={[-0.5, 0, 0]} ref={fixedL} {...segmentProps} type="fixed" />
-        <RigidBody position={[-0.5, -0.5, 0]} ref={j1L} {...segmentProps}>
+        <RigidBody position={[0, 0, 0]} ref={fixed} {...segmentProps} type="fixed" />
+        <RigidBody position={[0, -0.5, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[-0.5, -1, 0]} ref={j2L} {...segmentProps}>
+        <RigidBody position={[0, -1, 0]} ref={j2} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody position={[-0.5, -1.5, 0]} ref={j3L} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-
-        {/* Right Chain */}
-        <RigidBody position={[0.5, 0, 0]} ref={fixedR} {...segmentProps} type="fixed" />
-        <RigidBody position={[0.5, -0.5, 0]} ref={j1R} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-        <RigidBody position={[0.5, -1, 0]} ref={j2R} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-        <RigidBody position={[0.5, -1.5, 0]} ref={j3R} {...segmentProps}>
+        <RigidBody position={[0, -1.5, 0]} ref={j3} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
 
@@ -256,7 +233,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
       </group>
       <mesh ref={bandL}>
         <meshStandardMaterial
-          color="#2a2520"
+          color="#111318"
           roughness={0.5}
           metalness={0.2}
           side={THREE.DoubleSide}
@@ -264,7 +241,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
       </mesh>
       <mesh ref={bandR}>
         <meshStandardMaterial
-          color="#2a2520"
+          color="#111318"
           roughness={0.5}
           metalness={0.2}
           side={THREE.DoubleSide}
@@ -284,11 +261,11 @@ function CardMesh() {
       {/* clip / lanyard top */}
       <mesh position={[0, 1.2, 0]}>
         <boxGeometry args={[0.3, 0.1, 0.04]} />
-        <meshStandardMaterial color="#2a2520" metalness={0.8} roughness={0.3} />
+        <meshStandardMaterial color="#181b24" metalness={0.8} roughness={0.25} />
       </mesh>
       <mesh position={[0, 1.05, 0]}>
         <torusGeometry args={[0.08, 0.02, 16, 32]} />
-        <meshStandardMaterial color="#9a8d7a" metalness={0.9} roughness={0.2} />
+        <meshStandardMaterial color="#cbd5e1" metalness={0.95} roughness={0.15} />
       </mesh>
       {/* front */}
       <mesh>
@@ -334,64 +311,76 @@ function useCanvasTexture(
 }
 
 function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THREE.CanvasTexture) {
-  // muted nonchalant gradient bg (bone → warm taupe)
+  // Sleek tech badge gradient (deep graphite / obsidian with subtle indigo tint)
   const g = ctx.createLinearGradient(0, 0, w, h);
-  g.addColorStop(0, "#e8e1d6");
-  g.addColorStop(0.55, "#c9bdaa");
-  g.addColorStop(1, "#a89784");
+  g.addColorStop(0, "#0e1017");
+  g.addColorStop(0.6, "#141724");
+  g.addColorStop(1, "#1a1d2e");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
 
-  // noise dots
-  ctx.globalAlpha = 0.06;
-  for (let i = 0; i < 600; i++) {
-    ctx.fillStyle = "#3a3530";
-    ctx.fillRect(Math.random() * w, Math.random() * h, 2, 2);
+  // Subtle tech grid pattern
+  ctx.strokeStyle = "rgba(99, 102, 241, 0.08)";
+  ctx.lineWidth = 1;
+  const gridSize = 32;
+  for (let x = 0; x < w; x += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, h);
+    ctx.stroke();
   }
-  ctx.globalAlpha = 1;
+  for (let y = 0; y < h; y += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(w, y);
+    ctx.stroke();
+  }
 
-  // rounded paper panel
-  roundRect(ctx, 30, 200, w - 60, h - 240, 32);
-  ctx.fillStyle = "rgba(248,244,237,0.96)";
+  // Inner card panel
+  roundRect(ctx, 30, 200, w - 60, h - 240, 28);
+  ctx.fillStyle = "#121520";
   ctx.fill();
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
 
   // avatar circle
   ctx.beginPath();
   ctx.arc(w / 2, 180, 70, 0, Math.PI * 2);
-  ctx.fillStyle = "#ede5d6";
+  ctx.fillStyle = "#1a1e2d";
   ctx.fill();
-  ctx.lineWidth = 6;
-  ctx.strokeStyle = "#f8f4ed";
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#6366f1";
   ctx.stroke();
   ctx.font = "bold 64px system-ui";
-  ctx.fillStyle = "#3a3530";
+  ctx.fillStyle = "#ffffff";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText("R", w / 2, 184);
 
   // Name + role
-  ctx.fillStyle = "#2a2520";
+  ctx.fillStyle = "#ffffff";
   ctx.font = "bold 42px system-ui";
   ctx.fillText("Riyansyah", w / 2, 290);
-  ctx.font = "500 24px system-ui";
-  ctx.fillStyle = "#9b6a4a";
+  ctx.font = "600 22px system-ui";
+  ctx.fillStyle = "#818cf8";
   ctx.fillText("Full-Stack Developer", w / 2, 326);
 
   // divider
-  ctx.fillStyle = "#9b6a4a";
-  ctx.fillRect(w / 2 - 40, 348, 80, 4);
+  ctx.fillStyle = "#6366f1";
+  ctx.fillRect(w / 2 - 36, 348, 72, 3);
 
   // Contact lines
-  ctx.font = "500 22px system-ui";
-  ctx.fillStyle = "#5a544c";
+  ctx.font = "500 21px system-ui";
+  ctx.fillStyle = "#94a3b8";
   ctx.textAlign = "left";
   const x = 70;
 
   // Mail icon (drawn via canvas path)
   ctx.save();
   ctx.translate(x, 397);
-  ctx.strokeStyle = "#5a544c";
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = "#818cf8";
+  ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.roundRect(0, 0, 18, 14, 2);
   ctx.stroke();
@@ -406,24 +395,24 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
   // Map pin icon (drawn via canvas path)
   ctx.save();
   ctx.translate(x, 476);
-  ctx.fillStyle = "#5a544c";
+  ctx.fillStyle = "#818cf8";
   ctx.beginPath();
   ctx.moveTo(8, 18);
   ctx.bezierCurveTo(8, 18, 0, 10, 0, 6);
   ctx.arc(8, 6, 8, Math.PI, 0, false);
   ctx.bezierCurveTo(16, 10, 8, 18, 8, 18);
   ctx.fill();
-  ctx.fillStyle = "#f8f4ed";
+  ctx.fillStyle = "#121520";
   ctx.beginPath();
   ctx.arc(8, 6, 3, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
-  ctx.fillStyle = "#5a544c";
+  ctx.fillStyle = "#94a3b8";
   ctx.fillText("Majalengka, ID", x + 24, 490);
 
-  // socials row — muted monochrome
+  // socials row
   const socials = ["GH", "DC", "X"];
-  const colors = ["#2a2520", "#5865F2", "#2a2520"];
+  const colors = ["#1e2232", "#5865F2", "#1e2232"];
   socials.forEach((s, i) => {
     const cx = 70 + i * 90;
     const cy = 580;
@@ -431,7 +420,10 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
     ctx.arc(cx, cy, 32, 0, Math.PI * 2);
     ctx.fillStyle = colors[i];
     ctx.fill();
-    ctx.fillStyle = "#f8f4ed";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.font = "bold 18px system-ui";
@@ -439,10 +431,10 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
   });
 
   // chip footer
-  ctx.fillStyle = "#2a2520";
+  ctx.fillStyle = "#0a0c12";
   ctx.fillRect(0, h - 60, w, 60);
-  ctx.fillStyle = "#d6c9b3";
-  ctx.font = "bold 18px system-ui";
+  ctx.fillStyle = "#818cf8";
+  ctx.font = "bold 17px system-ui";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText("· developer · builder · whatever ·", w / 2, h - 30);
@@ -450,8 +442,8 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
 
 function drawBack(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THREE.CanvasTexture) {
   const g = ctx.createLinearGradient(0, 0, w, h);
-  g.addColorStop(0, "#ede5d6");
-  g.addColorStop(1, "#b89980");
+  g.addColorStop(0, "#0e1017");
+  g.addColorStop(1, "#181b28");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
 
@@ -460,8 +452,8 @@ function drawBack(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THRE
   const qy = 140;
 
   // Background box for QR code
-  ctx.fillStyle = "#f8f4ed";
-  roundRect(ctx, qx - 18, qy - 18, qrSize + 36, qrSize + 36, 24);
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, qx - 18, qy - 18, qrSize + 36, qrSize + 36, 20);
   ctx.fill();
 
   // Load actual QR code from public folder
@@ -473,14 +465,14 @@ function drawBack(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THRE
   };
 
   // tagline
-  ctx.fillStyle = "#2a2520";
+  ctx.fillStyle = "#ffffff";
   ctx.textAlign = "center";
-  ctx.font = "bold 36px system-ui";
+  ctx.font = "bold 34px system-ui";
   ctx.fillText("scan to get my cv", w / 2, h - 140);
   ctx.font = "500 22px system-ui";
   ctx.fillText("Riyansyah Anugrah Pratama", w / 2, h - 100);
   ctx.font = "italic 18px system-ui";
-  ctx.fillStyle = "#6b4a35";
+  ctx.fillStyle = "#818cf8";
   ctx.fillText("— full-stack developer", w / 2, h - 70);
 }
 

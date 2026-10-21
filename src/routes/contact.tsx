@@ -126,7 +126,7 @@ function ContactPage() {
           animate={{ opacity: 1, y: 0 }}
           className="font-display text-5xl font-bold md:text-7xl"
         >
-          {t("contact.title")} <span className="text-gradient-fun">{t("contact.chat")}</span>.
+          {t("contact.title")} <span className="text-accent">{t("contact.chat")}</span>.
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -168,7 +168,7 @@ function ContactPage() {
               whileHover={{ scale: 1.02 }}
               type="submit"
               disabled={loading}
-              className="w-full rounded-full bg-gradient-fun px-6 py-4 font-display text-lg font-bold text-white shadow-pop disabled:opacity-50"
+              className="w-full rounded-full bg-foreground px-6 py-4 font-display text-lg font-bold text-background shadow-pop disabled:opacity-50"
             >
               {loading ? "Mengirim..." : sent ? t("contact.sent") : t("contact.send")}
             </motion.button>
@@ -193,7 +193,6 @@ function ContactPage() {
               >
                 <span className="text-3xl group-hover:animate-wiggle">{s.icon}</span>
                 <span className="font-display text-2xl font-bold">{s.name}</span>
-                <span className="ml-auto text-2xl">→</span>
               </motion.a>
             ))}
           </div>

@@ -83,7 +83,7 @@ function AboutPage() {
           animate={{ opacity: 1, y: 0 }}
           className="font-display text-5xl font-bold md:text-7xl"
         >
-          {t("about.title")} <span className="text-gradient-fun">{t("about.me")}</span>
+          {t("about.title")} <span className="text-accent">{t("about.me")}</span>
         </motion.h1>
 
         <p className="mt-10 max-w-3xl text-2xl leading-relaxed md:text-3xl">
@@ -125,7 +125,7 @@ function AboutPage() {
 
         {/* Timeline */}
         <h2 className="mt-24 font-display text-4xl font-bold md:text-5xl">
-          {t("about.theJourney")} <span className="text-gradient-warm">{t("about.journey")}</span>
+          {t("about.theJourney")} <span className="text-accent">{t("about.journey")}</span>
         </h2>
         <div className="relative mt-10 ml-4">
           <motion.div
@@ -134,7 +134,7 @@ function AboutPage() {
             viewport={{ once: true }}
             transition={{ duration: 1.2 }}
             style={{ originY: 0 }}
-            className="absolute left-0 top-0 h-full w-1 bg-gradient-fun"
+            className="absolute left-0 top-0 h-full w-1 bg-foreground"
           />
           <div className="space-y-10 pl-10">
             {timeline.map((t, i) => (
@@ -146,7 +146,7 @@ function AboutPage() {
                 transition={{ delay: i * 0.15 }}
                 className="relative"
               >
-                <div className="absolute -left-[2.65rem] top-1.5 h-5 w-5 rounded-full border-4 border-background bg-gradient-fun" />
+                <div className="absolute -left-[2.65rem] top-1.5 h-5 w-5 rounded-full border-4 border-background bg-foreground" />
                 <div className="text-sm font-semibold text-purple">{t.year}</div>
                 <div className="mt-1 font-display text-2xl font-bold">
                   {locale === "id" ? t.titleId : t.titleEn}
@@ -161,7 +161,7 @@ function AboutPage() {
 
         {/* Skills */}
         <h2 className="mt-24 font-display text-4xl font-bold md:text-5xl">
-          {t("about.theStack")} <span className="text-gradient-cool">{t("about.stack")}</span>
+          {t("about.theStack")} <span className="text-accent">{t("about.stack")}</span>
         </h2>
         <div className="mt-10 space-y-8">
           {Object.entries(skills).map(([group, list]) => (

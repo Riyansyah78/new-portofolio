@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "film-organizer",
+    "title": "Film Organizer",
+    "category": "Web",
+    "description": {
+      "en": "Personal cinema tracker with local watchlist state and movie metadata search.",
+      "id": "Aplikasi pelacak film personal dengan status watchlist lokal dan pencarian metadata film."
+    },
+    "long": {
+      "en": "Built a responsive film catalog for organizing watchlists and logging watched movies. Implemented fast client-side filtering, debounced search against TMDB API, and responsive poster grid layouts.",
+      "id": "Membangun katalog film responsif untuk mengatur daftar tontonan dan riwayat film. Mengimplementasikan pencarian ter-debounce dengan API TMDB, filter client-side instan, dan layout poster grid responsif."
+    },
+    "tech": ["React", "Vite", "Tailwind CSS"],
+    "image": "/projects/film-organizer.png",
+    "repo": "https://github.com/Riyansyah78/film-organizer-react",
+    "demo": "https://film-organizer-nu.vercel.app",
+    "series": "Personal Tools",
+    "edition": "1 of 1",
+    "year": 2024
+  },
+  {
+    "slug": "pustaka-connect",
+    "title": "PustakaConnect",
+    "category": "Web",
+    "description": {
+      "en": "Full-stack library catalog with Supabase auth, real-time loans, and member reviews.",
+      "id": "Katalog perpustakaan full-stack dengan autentikasi Supabase, peminjaman real-time, dan ulasan anggota."
+    },
+    "long": {
+      "en": "End-to-end circulation platform featuring role-based access (admin/member), Supabase PostgreSQL backend with Row-Level Security, real-time book loan tracking, and interactive community reviews.",
+      "id": "Platform sirkulasi buku end-to-end dengan kontrol akses berbasis peran (admin/anggota), backend PostgreSQL Supabase dengan Row-Level Security, pelacakan peminjaman buku real-time, dan ulasan interaktif."
+    },
+    "tech": ["React", "Supabase", "Tailwind CSS", "Framer Motion"],
+    "image": "/projects/pustaka-connect.png",
+    "repo": "https://github.com/Riyansyah78/library-app",
+    "demo": "https://pustaka-connect.vercel.app/",
+    "series": "Full-stack Apps",
+    "edition": "1 of 1",
+    "year": 2024
+  },
+  {
+    "slug": "soundcloud-clone",
+    "title": "SoundCloud Clone",
+    "category": "Web",
+    "description": {
+      "en": "Audio streaming app featuring playlist management, track uploads, and Howler.js playback.",
+      "id": "Aplikasi streaming audio dengan manajemen playlist, upload trek, dan playback audio Howler.js."
+    },
+    "long": {
+      "en": "Full-featured audio platform utilizing Howler.js for seamless playback, timeline scrubbing, and persistent audio state across page transitions managed via Zustand. Backed by Supabase storage for track uploads.",
+      "id": "Platform streaming audio interaktif menggunakan Howler.js untuk playback audio mulus, seekbar scrubbing, dan state audio persisten di seluruh navigasi halaman dengan Zustand, didukung penyimpanan Supabase."
+    },
+    "tech": ["React", "Supabase", "Howler.js", "Zustand"],
+    "image": "/projects/soundcloud-clone.png",
+    "repo": "https://github.com/Riyansyah78/soundcloud-clone",
+    "demo": "https://soundcloud-clone-psi.vercel.app/",
+    "series": "Audio Experiments",
+    "edition": "1 of 1",
+    "year": 2024
+  }
+]

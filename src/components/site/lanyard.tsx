@@ -320,7 +320,7 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
   ctx.fillRect(0, 0, w, h);
 
   // Subtle tech grid pattern
-  ctx.strokeStyle = "rgba(99, 102, 241, 0.08)";
+  ctx.strokeStyle = "rgba(148, 152, 162, 0.08)";
   ctx.lineWidth = 1;
   const gridSize = 32;
   for (let x = 0; x < w; x += gridSize) {
@@ -350,7 +350,7 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
   ctx.fillStyle = "#1a1e2d";
   ctx.fill();
   ctx.lineWidth = 4;
-  ctx.strokeStyle = "#6366f1";
+  ctx.strokeStyle = "#ffffffff";
   ctx.stroke();
   ctx.font = "bold 64px system-ui";
   ctx.fillStyle = "#ffffff";
@@ -363,11 +363,11 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
   ctx.font = "bold 42px system-ui";
   ctx.fillText("Riyansyah", w / 2, 290);
   ctx.font = "600 22px system-ui";
-  ctx.fillStyle = "#818cf8";
+  ctx.fillStyle = "#fdfdfdff";
   ctx.fillText("Full-Stack Developer", w / 2, 326);
 
   // divider
-  ctx.fillStyle = "#6366f1";
+  ctx.fillStyle = "#a1a1aa";
   ctx.fillRect(w / 2 - 36, 348, 72, 3);
 
   // Contact lines
@@ -379,7 +379,7 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
   // Mail icon (drawn via canvas path)
   ctx.save();
   ctx.translate(x, 397);
-  ctx.strokeStyle = "#818cf8";
+  ctx.strokeStyle = "#a1a1aa";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.roundRect(0, 0, 18, 14, 2);
@@ -395,7 +395,7 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
   // Map pin icon (drawn via canvas path)
   ctx.save();
   ctx.translate(x, 476);
-  ctx.fillStyle = "#818cf8";
+  ctx.fillStyle = "#a1a1aa";
   ctx.beginPath();
   ctx.moveTo(8, 18);
   ctx.bezierCurveTo(8, 18, 0, 10, 0, 6);
@@ -433,7 +433,7 @@ function drawFront(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THR
   // chip footer
   ctx.fillStyle = "#0a0c12";
   ctx.fillRect(0, h - 60, w, 60);
-  ctx.fillStyle = "#818cf8";
+  ctx.fillStyle = "#ffffffff";
   ctx.font = "bold 17px system-ui";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -472,8 +472,8 @@ function drawBack(ctx: CanvasRenderingContext2D, w: number, h: number, tex: THRE
   ctx.font = "500 22px system-ui";
   ctx.fillText("Riyansyah Anugrah Pratama", w / 2, h - 100);
   ctx.font = "italic 18px system-ui";
-  ctx.fillStyle = "#818cf8";
-  ctx.fillText("— full-stack developer", w / 2, h - 70);
+  ctx.fillStyle = "#ffffffff";
+  ctx.fillText("full-stack developer", w / 2, h - 70);
 }
 
 function roundRect(

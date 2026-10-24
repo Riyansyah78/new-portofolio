@@ -87,6 +87,14 @@ const translations: Translations = {
   "projects.liveDemo": { en: "Live demo", id: "Demo langsung" },
   "projects.source": { en: "Source", id: "Kode sumber" },
 
+  // Gallery
+  "gallery.title": { en: "Visual", id: "Galeri" },
+  "gallery.highlight": { en: "gallery", id: "visual" },
+  "gallery.subtitle": {
+    en: "Screenshots, interfaces, and details from shipped products.",
+    id: "Tangkapan layar, antarmuka, dan detail dari produk yang dirilis.",
+  },
+
   // Contact
   "contact.title": { en: "Let's", id: "Mari" },
   "contact.chat": { en: "chat", id: "ngobrol" },

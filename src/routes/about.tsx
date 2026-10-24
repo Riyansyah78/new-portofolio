@@ -23,28 +23,42 @@ export const Route = createFileRoute("/about")({
 });
 
 const skills = {
+  Languages: [
+    { name: "TypeScript", color: "bg-blue" },
+    { name: "JavaScript", color: "bg-yellow" },
+    { name: "PHP", color: "bg-purple" },
+    { name: "SCSS", color: "bg-pink" },
+  ],
   Frontend: [
     { name: "React", color: "bg-cyan" },
-    { name: "TypeScript", color: "bg-blue" },
-    { name: "Tailwind", color: "bg-mint" },
-    { name: "Next.js", color: "bg-foreground text-background" },
+    { name: "Tailwind CSS", color: "bg-mint" },
+    { name: "TanStack Router", color: "bg-foreground text-background" },
+    { name: "React Router", color: "bg-purple" },
+    { name: "Three.js", color: "bg-foreground text-background" },
+    { name: "React Three Fiber", color: "bg-cyan" },
+    { name: "Rapier", color: "bg-blue" },
   ],
   Backend: [
     { name: "Node.js", color: "bg-mint" },
-    { name: "PostgreSQL", color: "bg-blue" },
-    { name: "MySQL", color: "bg-blue" },
+    { name: "Supabase", color: "bg-cyan" },
+    { name: "Laravel", color: "bg-orange" },
   ],
   Tools: [
-    { name: "Figma", color: "bg-pink" },
     { name: "Vite", color: "bg-yellow" },
     { name: "Git", color: "bg-mint" },
+    { name: "Vercel", color: "bg-foreground text-background" },
+    { name: "Framer Motion", color: "bg-pink" },
+    { name: "Zustand", color: "bg-orange" },
+    { name: "React Hook Form", color: "bg-pink" },
+    { name: "Swiper", color: "bg-blue" },
+    { name: "Howler.js", color: "bg-blue" },
   ],
 };
 
 const timeline = [
   {
-    year: "2024",
-    titleEn: "IT Support",
+    year: "July 2024 - Desember 2024",
+    titleEn: "Intern IT Support",
     titleId: "IT Support",
     descEn: "Helpdesk & Desktop Support",
     descId: "Helpdesk & Desktop Support",

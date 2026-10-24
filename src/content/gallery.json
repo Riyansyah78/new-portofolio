@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "film-organizer-search",
+    "title": "Search UI",
+    "category": "Interface",
+    "image": "/projects/film-organizer.png",
+    "print": "film-organizer"
+  },
+  {
+    "slug": "pustaka-connect-dashboard",
+    "title": "Library Dashboard",
+    "category": "Dashboard",
+    "image": "/projects/pustaka-connect.png",
+    "print": "pustaka-connect"
+  },
+  {
+    "slug": "soundcloud-player",
+    "title": "Audio Player",
+    "category": "Audio",
+    "image": "/projects/soundcloud-clone.png",
+    "print": "soundcloud-clone"
+  }
+]

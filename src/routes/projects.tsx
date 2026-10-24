@@ -1,309 +1,464 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
-import { useMemo, useState, type MouseEvent, type ReactNode } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { IconFilm, IconBook, IconMusic } from "@/components/ui/icons";
+import prints from "@/content/prints.json";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
-      { title: "Projects Riyansyah" },
+      { title: "Work — Riyansyah" },
       {
         name: "description",
-        content: "Selected work by Riyansyah: web apps, mobile, open source, and experiments.",
+        content: "Selected work by Riyansyah: web apps, full-stack, audio experiments.",
       },
-      { property: "og:title", content: "Projects Riyansyah" },
+      { property: "og:title", content: "Work — Riyansyah" },
       {
         property: "og:description",
         content: "A curated collection of shipped products and experiments.",
       },
     ],
   }),
-  component: ProjectsPage,
+  component: WorkPage,
 });
 
-type Project = {
-  title: string;
-  category: "Web" | "Mobile" | "Open Source";
-  desc: string;
-  long: string;
-  tech: string[];
-  gradient: string;
-  icon: ReactNode;
-  image?: string;
-  demo?: string;
-  repo?: string;
-};
+type Print = (typeof prints)[number];
 
-const PROJECTS: Project[] = [
-  {
-    title: "Film Organizer",
-    category: "Web",
-    desc: "projects.filmOrganizer.desc",
-    long: "projects.filmOrganizer.long",
-    tech: ["React", "Vite", "Tailwind CSS"],
-    gradient: "bg-gradient-cool",
-    icon: <IconFilm className="h-14 w-14" />,
-    image:
-      "https://api.microlink.io/?url=https://film-organizer-nu.vercel.app&screenshot=true&meta=false&embed=screenshot.url",
-    repo: "https://github.com/Riyansyah78/film-organizer-react",
-    demo: "https://film-organizer-nu.vercel.app",
-  },
-  {
-    title: "PustakaConnect",
-    category: "Web",
-    desc: "projects.pustakaConnect.desc",
-    long: "projects.pustakaConnect.long",
-    tech: ["React", "Supabase", "Tailwind CSS", "Framer Motion"],
-    gradient: "bg-gradient-warm",
-    icon: <IconBook className="h-14 w-14" />,
-    image:
-      "https://api.microlink.io/?url=https://pustaka-connect.vercel.app/&screenshot=true&meta=false&embed=screenshot.url",
-    repo: "https://github.com/Riyansyah78/library-app",
-    demo: "https://pustaka-connect.vercel.app/",
-  },
-  {
-    title: "SoundCloud Clone",
-    category: "Web",
-    desc: "projects.soundcloudClone.desc",
-    long: "projects.soundcloudClone.long",
-    tech: ["React", "Supabase", "Howler.js", "Zustand"],
-    gradient: "bg-gradient-fun",
-    icon: <IconMusic className="h-14 w-14" />,
-    image:
-      "https://api.microlink.io/?url=https://soundcloud-clone-psi.vercel.app/&screenshot=true&meta=false&embed=screenshot.url",
-    repo: "https://github.com/Riyansyah78/soundcloud-clone",
-    demo: "https://soundcloud-clone-psi.vercel.app/",
-  },
-];
+const CATEGORIES = ["All", "Web", "Mobile"];
 
-const FILTERS = ["All", "Web", "Mobile", "Open Source"] as const;
+/* ── reduced-motion ────────────────────────────────────────────────── */
+function usePrefersReducedMotion() {
+  const [r, set] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    set(mq.matches);
+    const h = (e: MediaQueryListEvent) => set(e.matches);
+    mq.addEventListener("change", h);
+    return () => mq.removeEventListener("change", h);
+  }, []);
+  return r;
+}
 
-function ProjectsPage() {
-  const { t } = useI18n();
-  const isMobile = useIsMobile();
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
-  const [active, setActive] = useState<Project | null>(null);
+/* ── stagger wrapper ───────────────────────────────────────────────── */
+function Rise({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const reduced = usePrefersReducedMotion();
+  return (
+    <motion.div
+      initial={reduced ? false : { opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MAIN PAGE
+   ═══════════════════════════════════════════════════════════════════════ */
+function WorkPage() {
+  const { t, locale } = useI18n();
+  const reduced = usePrefersReducedMotion();
+  const [filter, setFilter] = useState("All");
+  const [selectedPrint, setSelectedPrint] = useState<Print | null>(null);
+
+  /* Lock body scroll and handle Escape key when popup is open */
+  useEffect(() => {
+    if (!selectedPrint) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedPrint(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [selectedPrint]);
 
   const visible = useMemo(
-    () => (filter === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === filter)),
+    () => (filter === "All" ? prints : prints.filter((p) => p.category === filter)),
     [filter],
   );
-
-  const filterLabels: Record<string, string> = {
-    All: t("projects.all"),
-    Web: "Web",
-    Mobile: "Mobile",
-    "Open Source": "Open Source",
-  };
 
   return (
     <main className="relative min-h-screen overflow-hidden pt-28 noise">
       <div className="container relative mx-auto max-w-7xl px-6 py-12">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-display text-5xl font-bold md:text-7xl"
-        >
-          {t("projects.title")} <span className="text-accent">{t("projects.work")}</span>
-        </motion.h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("projects.subtitle")}</p>
+        <Rise>
+          <h1 className="font-display text-5xl font-bold md:text-7xl">
+            {t("projects.title")} <span className="text-accent">{t("projects.work")}</span>
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("projects.subtitle")}</p>
+        </Rise>
 
-        {/* Filters */}
-        <div className="mt-10 flex flex-wrap gap-3">
-          {FILTERS.map((f) => {
-            const isActive = filter === f;
-            return (
+        <Rise delay={0.1}>
+          <div className="mt-8 flex flex-wrap gap-2" aria-label="Filter projects">
+            {CATEGORIES.map((c) => (
               <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className="relative rounded-full px-5 py-2 text-sm font-semibold transition-colors"
+                key={c}
+                type="button"
+                aria-pressed={filter === c}
+                onClick={() => setFilter(c)}
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                  filter === c
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-foreground/20 bg-background/70 text-foreground/70 hover:border-foreground/50"
+                }`}
               >
-                {isActive && (
-                  <motion.span
-                    layoutId="filter-pill"
-                    className="absolute inset-0 rounded-full bg-foreground"
-                    transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                  />
-                )}
-                <span
-                  className={`relative z-10 ${isActive ? "text-background" : "text-foreground/70"}`}
-                >
-                  {filterLabels[f] || f}
-                </span>
+                {c === "All" ? t("projects.all") : c}
               </button>
-            );
-          })}
-        </div>
-
-        {/* Grid */}
-        <motion.div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {visible.map((p, i) => (
-              <ProjectCard
-                key={p.title}
-                p={p}
-                index={i}
-                onClick={() => setActive(p)}
-                disableTilt={isMobile}
-              />
             ))}
-          </AnimatePresence>
-        </motion.div>
-      </div>
+          </div>
+        </Rise>
 
-      {/* Modal */}
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-foreground/60 p-4 backdrop-blur-sm"
-            onClick={() => setActive(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 30 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 30 }}
-              transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl overflow-hidden rounded-3xl border-2 border-foreground bg-card shadow-card"
+        <Rise delay={0.15}>
+          <HangHero
+            prints={visible}
+            reduced={reduced}
+            selectedSlug={selectedPrint?.slug ?? null}
+            onSelect={(p) => setSelectedPrint(p)}
+          />
+        </Rise>
+
+        {/* Smooth Shared-Element Transition Popup */}
+        <AnimatePresence>
+          {selectedPrint && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="popup-title"
             >
-              <div
-                className={`relative flex h-56 items-center justify-center ${active.gradient} text-white`}
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.24 }}
+                onClick={() => setSelectedPrint(null)}
+                className="fixed inset-0 bg-black/60 backdrop-blur-md"
+              />
+
+              {/* Shared morphing card */}
+              <motion.div
+                layoutId={`card-${selectedPrint.slug}`}
+                transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-foreground/15 bg-card p-6 text-card-foreground shadow-[0_32px_80px_-20px_rgba(0,0,0,.6)] sm:p-8"
               >
-                {active.image ? (
-                  <img
-                    src={active.image}
-                    alt={active.title}
-                    className="absolute inset-0 h-full w-full object-cover opacity-90 transition-opacity hover:opacity-100"
-                  />
-                ) : (
-                  active.icon
-                )}
-              </div>
-              <div className="p-8">
-                <div className="text-xs font-semibold uppercase tracking-widest text-purple">
-                  {active.category}
-                </div>
-                <h3 className="mt-1 font-display text-3xl font-bold">{active.title}</h3>
-                <p className="mt-3 text-muted-foreground">{t(active.long)}</p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {active.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold"
-                    >
-                      {tech}
+                {/* Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedPrint(null)}
+                  className="absolute right-5 top-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 bg-background/80 text-foreground shadow transition hover:bg-foreground hover:text-background"
+                  aria-label="Close dialog"
+                >
+                  ✕
+                </button>
+
+                <div className="space-y-5">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-foreground/10 bg-muted">
+                    <motion.img
+                      layoutId={`img-${selectedPrint.slug}`}
+                      src={selectedPrint.image}
+                      alt={selectedPrint.title}
+                      className="h-full w-full object-cover"
+                    />
+                    <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur">
+                      {selectedPrint.category}
                     </span>
-                  ))}
-                </div>
-                <div className="mt-6 flex gap-3">
-                  <button
-                    onClick={() => setActive(null)}
-                    className="rounded-full border-2 border-foreground bg-background px-5 py-2.5 text-sm font-semibold"
+                    <span className="absolute right-3 top-3 rounded-full bg-background/80 px-2.5 py-1 text-xs font-medium text-foreground backdrop-blur">
+                      {selectedPrint.year}
+                    </span>
+                  </div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.12, duration: 0.2 }}
+                    className="text-left space-y-1.5"
                   >
-                    {t("projects.close")}
-                  </button>
-                  {active.demo && (
-                    <a
-                      href={active.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow-pop hover:scale-105 transition-transform"
-                    >
-                      {t("projects.liveDemo")}
-                    </a>
-                  )}
-                  {active.repo && (
-                    <a
-                      href={active.repo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background"
-                    >
-                      {t("projects.source")}
-                    </a>
-                  )}
+                    <h2 id="popup-title" className="font-display text-2xl font-bold sm:text-3xl">
+                      {selectedPrint.title}
+                    </h2>
+                    <p className="text-base text-muted-foreground leading-relaxed">
+                      {selectedPrint.description[locale as "en" | "id"] ?? selectedPrint.description.en}
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.16, duration: 0.2 }}
+                    className="flex flex-wrap gap-2 pt-1"
+                  >
+                    {selectedPrint.tech.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full bg-foreground/5 px-3 py-1 text-xs font-medium text-foreground/80 border border-foreground/10"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.2 }}
+                    className="flex flex-wrap items-center gap-3 pt-2"
+                  >
+                    {selectedPrint.demo && (
+                      <a
+                        href={selectedPrint.demo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow transition-transform hover:scale-105"
+                      >
+                        Live Demo 
+                      </a>
+                    )}
+                    {selectedPrint.repo && (
+                      <a
+                        href={selectedPrint.repo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-full border border-foreground/20 bg-background/70 px-5 py-2.5 text-sm font-semibold text-foreground transition-transform hover:scale-105"
+                      >
+                        GitHub 
+                      </a>
+                    )}
+                  </motion.div>
                 </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+      </div>
     </main>
   );
 }
 
-function ProjectCard({
-  p,
-  index,
-  onClick,
-  disableTilt,
+/* ═══════════════════════════════════════════════════════════════════════
+   3D HANG HERO
+   wheel / drag / arrow-keys / cursor parallax / idle float / hover lift
+   ═══════════════════════════════════════════════════════════════════════ */
+function HangHero({
+  prints: items,
+  reduced,
+  selectedSlug,
+  onSelect,
 }: {
-  p: Project;
-  index: number;
-  onClick: () => void;
-  disableTilt?: boolean;
+  prints: Print[];
+  reduced: boolean;
+  selectedSlug: string | null;
+  onSelect: (p: Print) => void;
 }) {
-  const { t } = useI18n();
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollX = useMotionValue(0);
+  const springX = useSpring(scrollX, { stiffness: 120, damping: 26, mass: 0.8 });
+  const dragStartX = useRef(0);
+  const dragStartScroll = useRef(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const movedRef = useRef(false);
+  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
 
-  const onMove = (e: MouseEvent<HTMLButtonElement>) => {
-    if (disableTilt) return;
+  /* idle float */
+  const idleOffset = useMotionValue(0);
+  useEffect(() => {
+    if (reduced) return;
+    let frame = 0;
+    const tick = () => {
+      idleOffset.set(Math.sin(Date.now() / 3000) * 6);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [reduced, idleOffset]);
 
-    const r = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    setTilt({ x: y * -10, y: x * 12 });
+  /* wheel → horizontal scroll */
+  const onWheel = useCallback(
+    (e: WheelEvent) => {
+      e.preventDefault();
+      scrollX.set(scrollX.get() - e.deltaY * 1.5);
+    },
+    [scrollX],
+  );
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [onWheel]);
+
+  /* arrow keys */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") scrollX.set(scrollX.get() + 320);
+      if (e.key === "ArrowRight") scrollX.set(scrollX.get() - 320);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [scrollX]);
+
+  /* drag */
+  const onPointerDown = (e: React.PointerEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest("button")) return;
+
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragStartX.current = e.clientX;
+    dragStartScroll.current = scrollX.get();
+    setIsDragging(true);
+    movedRef.current = false;
   };
-  const onLeave = () => {
-    if (disableTilt) return;
-    setTilt({ x: 0, y: 0 });
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!isDragging) {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (rect) {
+        setMousePos({
+          x: (e.clientX - rect.left) / rect.width,
+          y: (e.clientY - rect.top) / rect.height,
+        });
+      }
+      return;
+    }
+    const dx = e.clientX - dragStartX.current;
+    if (Math.abs(dx) > 5) movedRef.current = true;
+    scrollX.set(dragStartScroll.current + dx);
   };
+  const onPointerUp = () => setIsDragging(false);
 
   return (
-    <motion.button
-      layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.2, delay: index * 0.05 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      onClick={onClick}
-      style={
-        disableTilt
-          ? undefined
+    <div
+      ref={containerRef}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      className={`relative mt-8 overflow-hidden rounded-[2rem] border border-foreground/10 bg-[radial-gradient(circle_at_1px_1px,hsl(var(--foreground)/.08)_1px,transparent_0)] [background-size:24px_24px] ${isDragging ? "cursor-grabbing" : "cursor-grab"} select-none`}
+      style={{ minHeight: 380 }}
+      aria-label="Draggable project showcase. Drag or use arrow keys to browse."
+    >
+      <div className="pointer-events-none absolute inset-0 z-10 border-[14px] border-transparent [border-image:linear-gradient(135deg,#c9c6bc,#f8f7f3_18%,#a9a69e_38%,#f7f6f1_58%,#bebbb1_78%,#f3f2ec)_1]" />
+      <div className="pointer-events-none absolute left-1/2 top-0 z-10 h-8 w-24 -translate-x-1/2 rounded-b-2xl border-x border-b border-[#a8a59b] bg-gradient-to-b from-[#f9f8f3] to-[#c5c2b8] shadow-md" />
+
+      <motion.div className="flex items-end gap-8 px-10 py-14" style={{ x: springX }}>
+        {items.map((p, i) => (
+          <HangCard
+            key={p.slug}
+            print={p}
+            index={i}
+            mousePos={mousePos}
+            reduced={reduced}
+            idleY={idleOffset}
+            movedRef={movedRef}
+            isSelected={selectedSlug === p.slug}
+            onSelect={() => onSelect(p)}
+          />
+        ))}
+      </motion.div>
+
+      <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full border border-foreground/10 bg-background/85 px-4 py-2 text-xs text-muted-foreground backdrop-blur">
+        Drag · Scroll · Arrow keys · Click to open
+      </div>
+    </div>
+  );
+}
+
+/* ── Hang card ──────────────────────────────────────────────────────── */
+function HangCard({
+  print: p,
+  index,
+  mousePos,
+  reduced,
+  movedRef,
+  isSelected,
+  onSelect,
+}: {
+  print: Print;
+  index: number;
+  mousePos: { x: number; y: number };
+  reduced: boolean;
+  idleY: ReturnType<typeof useMotionValue>;
+  movedRef: React.MutableRefObject<boolean>;
+  isSelected: boolean;
+  onSelect: () => void;
+}) {
+  const px = reduced ? 0 : (mousePos.x - 0.5) * 8;
+  const py = reduced ? 0 : (mousePos.y - 0.5) * 5;
+  const hoverTilt = index % 2 === 0 ? -4 : 4;
+
+  return (
+    <motion.div
+      className="group relative w-[min(72vw,300px)] flex-shrink-0 sm:w-[280px]"
+      style={{ transformOrigin: "50% -56px" }}
+      whileHover={
+        isSelected
+          ? {}
           : {
-              transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-              transition: "transform 0.15s ease-out",
+              rotate: hoverTilt,
+              y: -6,
+              transition: { type: "spring", stiffness: 240, damping: 15, mass: 0.7 },
             }
       }
-      className="group relative overflow-hidden rounded-3xl border-2 border-foreground bg-card text-left shadow-card"
     >
-      <div
-        className={`relative flex h-44 items-center justify-center overflow-hidden ${p.gradient} text-white`}
+      <div className="absolute -top-14 left-1/2 h-14 w-px -translate-x-1/2 bg-gradient-to-b from-[#c3c0b5] via-[#858279] to-[#c3c0b5]" />
+      <div className="absolute -top-1 left-1/2 z-10 h-3 w-7 -translate-x-1/2 rounded-full border border-[#8d8a82] bg-gradient-to-b from-white to-[#aaa79e] shadow-md" />
+
+      <button
+        type="button"
+        onClick={() => {
+          if (!movedRef.current) onSelect();
+        }}
+        className="block w-full cursor-pointer text-left focus:outline-none"
+        aria-label={`Open popup for ${p.title}`}
       >
-        {p.image ? (
-          <img
-            src={p.image}
-            alt={p.title}
-            className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-100"
-          />
-        ) : (
-          <div className="transition-transform duration-500 group-hover:scale-110">{p.icon}</div>
-        )}
-      </div>
-      <div className="p-5">
-        <div className="text-xs font-semibold uppercase tracking-widest text-purple">
-          {p.category}
+        <div
+          style={{
+            transform: reduced ? "none" : `perspective(800px) rotateX(${py}deg) rotateY(${px}deg)`,
+            transformOrigin: "top center",
+            transition: "transform 0.15s ease-out",
+          }}
+        >
+          <motion.div
+            layoutId={`card-${p.slug}`}
+            transition={{ type: "spring", stiffness: 320, damping: 30 }}
+            className="overflow-hidden rounded-[1.2rem] border border-foreground/15 bg-[#f2f1ed] p-2.5 pt-5 text-[#20211e] shadow-[0_22px_60px_-24px_rgba(0,0,0,.48)]"
+          >
+            <div className="relative aspect-[1.6/1] overflow-hidden rounded-[0.9rem] bg-[#d9d8d1]">
+              <motion.img
+                layoutId={`img-${p.slug}`}
+                src={p.image}
+                alt={`${p.title} preview`}
+                draggable={false}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.035]"
+              />
+              <span className="absolute bottom-3 right-3 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-black shadow-md transition-all group-hover:scale-105">
+                View 
+              </span>
+            </div>
+            <div className="flex items-end justify-between gap-4 px-2 pb-2 pt-3">
+              <div>
+                <div className="font-display text-lg font-bold tracking-tight">{p.title}</div>
+                <div className="mt-1 line-clamp-1 text-xs text-[#696963]">{p.tech.join(" · ")}</div>
+              </div>
+              <span className="shrink-0 pb-0.5 text-[10px] font-medium uppercase tracking-widest text-[#77766f]">
+                0{index + 1}
+              </span>
+            </div>
+          </motion.div>
         </div>
-        <div className="mt-1 font-display text-xl font-bold">{p.title}</div>
-        <div className="mt-1 text-sm text-muted-foreground">{t(p.desc)}</div>
-      </div>
-    </motion.button>
+      </button>
+    </motion.div>
   );
 }

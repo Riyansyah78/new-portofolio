@@ -5,8 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Playful Colorful Design System
- * Vibrant gradients (pink→purple, orange→yellow, cyan→blue) on warm off-white.
+ * Clean Slate tech design system with neutral grayscale accents.
  * Typography: Space Grotesk (display) + Inter (body).
  * All colors in oklch.
  */
@@ -81,7 +80,7 @@
 :root {
   --radius: 1.25rem;
 
-  /* Clean Slate / Tech (Linear/Vercel style: cool neutral zinc, obsidian ink, electric indigo accent) */
+  /* Clean Slate / Tech: cool neutral zinc and obsidian ink */
   --background: oklch(0.975 0.003 260);
   --foreground: oklch(0.14 0.015 260);
 
@@ -96,17 +95,17 @@
   --secondary-foreground: oklch(0.18 0.015 260);
   --muted: oklch(0.935 0.006 260);
   --muted-foreground: oklch(0.48 0.015 260);
-  --accent: oklch(0.56 0.22 275); /* electric indigo / violet */
-  --accent-foreground: oklch(0.99 0 0);
+  --accent: oklch(0.14 0.015 260);
+  --accent-foreground: oklch(0.99 0.002 260);
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(0.88 0.008 260);
   --input: oklch(0.89 0.008 260);
-  --ring: oklch(0.56 0.22 275);
+  --ring: oklch(0.14 0.015 260);
 
-  /* Modern tech brand tokens */
+  /* Neutral accents; Discord button keeps its brand violet locally */
   --pink: oklch(0.65 0.2 340);
-  --purple: oklch(0.56 0.22 275); /* electric indigo */
+  --purple: oklch(0.14 0.015 260); /* neutral violet token */
   --orange: oklch(0.68 0.18 45);
   --yellow: oklch(0.82 0.15 85);
   --cyan: oklch(0.7 0.14 210); /* electric cyan */
@@ -114,18 +113,18 @@
   --mint: oklch(0.7 0.15 160); /* emerald / mint */
   --ink: oklch(0.14 0.015 260);
 
-  --gradient-warm: linear-gradient(135deg, oklch(0.56 0.22 275), oklch(0.62 0.2 300));
+  --gradient-warm: linear-gradient(135deg, oklch(0.14 0.015 260), oklch(0.14 0.015 260));
   --gradient-cool: linear-gradient(135deg, oklch(0.58 0.18 250), oklch(0.7 0.14 210));
-  --gradient-fun: linear-gradient(135deg, oklch(0.14 0.015 260), oklch(0.25 0.03 275));
+  --gradient-fun: linear-gradient(135deg, oklch(0.14 0.015 260), oklch(0.25 0.008 260));
   --gradient-mesh:
-    radial-gradient(at 20% 20%, oklch(0.65 0.15 275 / 0.15), transparent 55%),
+    radial-gradient(at 20% 20%, oklch(0.4 0.01 260 / 0.15), transparent 55%),
     radial-gradient(at 80% 30%, oklch(0.65 0.14 210 / 0.15), transparent 60%),
     radial-gradient(at 50% 90%, oklch(0.7 0.15 160 / 0.12), transparent 60%);
 
   --shadow-pop: 0 16px 40px -12px oklch(0.14 0.015 260 / 0.12);
   --shadow-card: 4px 4px 0 0 oklch(0.14 0.015 260 / 0.95);
 
-  --chart-1: oklch(0.56 0.22 275);
+  --chart-1: oklch(0.14 0.015 260);
   --chart-2: oklch(0.58 0.18 250);
   --chart-3: oklch(0.7 0.15 160);
   --chart-4: oklch(0.65 0.2 340);
@@ -138,10 +137,11 @@
   --sidebar-accent: oklch(0.935 0.006 260);
   --sidebar-accent-foreground: oklch(0.14 0.015 260);
   --sidebar-border: oklch(0.88 0.008 260);
-  --sidebar-ring: oklch(0.56 0.22 275);
+  --sidebar-ring: oklch(0.14 0.015 260);
 }
 
 .dark {
+  --purple: oklch(0.78 0.01 260);
   --background: oklch(0.12 0.015 260);
   --foreground: oklch(0.98 0.005 260);
   --card: oklch(0.16 0.015 260);
@@ -154,16 +154,16 @@
   --secondary-foreground: oklch(0.98 0.005 260);
   --muted: oklch(0.2 0.02 260);
   --muted-foreground: oklch(0.65 0.015 260);
-  --accent: oklch(0.68 0.22 275);
+  --accent: oklch(0.78 0.008 260);
   --accent-foreground: oklch(0.12 0.015 260);
   --destructive: oklch(0.65 0.22 25);
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(0.25 0.015 260);
   --input: oklch(0.25 0.015 260);
-  --ring: oklch(0.68 0.22 275);
-  --gradient-warm: linear-gradient(135deg, oklch(0.68 0.22 275), oklch(0.72 0.2 300));
+  --ring: oklch(0.72 0.01 260);
+  --gradient-warm: linear-gradient(135deg, oklch(0.78 0.008 260), oklch(0.62 0.01 260));
   --gradient-cool: linear-gradient(135deg, oklch(0.68 0.18 250), oklch(0.76 0.14 210));
-  --gradient-fun: linear-gradient(135deg, oklch(0.68 0.22 275), oklch(0.58 0.18 250));
+  --gradient-fun: linear-gradient(135deg, oklch(0.78 0.008 260), oklch(0.58 0.01 260));
 }
 
 @layer base {

@@ -36,7 +36,7 @@ export const Route = createFileRoute("/contact")({
 const socials: { name: string; href: string; color: string; icon: ReactNode }[] = [
   {
     name: "X",
-    href: "https://x.com/rynn_iam",
+    href: "https://x.com/rynndll",
     color: "bg-foreground text-background",
     icon: <IconTwitter className="h-7 w-7" />,
   },
@@ -49,7 +49,7 @@ const socials: { name: string; href: string; color: string; icon: ReactNode }[] 
   {
     name: "Discord",
     href: "https://discord.com/users/514809747057278977",
-    color: "bg-purple text-white",
+    color: "bg-[#5865F2] text-white",
     icon: <IconDiscord className="h-7 w-7" />,
   },
 ];

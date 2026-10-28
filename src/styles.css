@@ -355,3 +355,28 @@
     border-radius: 60% 40% 40% 60% / 40% 60% 40% 60%;
   }
 }
+
+@media (max-width: 767px) {
+  .fluid-background__orb {
+    animation: none;
+    filter: blur(36px);
+    transform: none;
+  }
+
+  .fluid-background__orb--3,
+  .fluid-background__orb--4,
+  .fluid-background__pointer,
+  .fluid-background__grain {
+    display: none;
+  }
+
+  .noise::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fluid-background__orb {
+    animation: none;
+  }
+}

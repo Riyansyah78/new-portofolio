@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useRef, useState, Suspense, useMemo } from "react";
-import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Lightformer, useTexture } from "@react-three/drei";
+import { Canvas, extend, useFrame } from "@react-three/fiber";
 import {
   BallCollider,
   CuboidCollider,
@@ -36,6 +35,9 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
   const vec = new THREE.Vector3();
   const ang = new THREE.Vector3();
   const dir = new THREE.Vector3();
+  const quat = new THREE.Quaternion();
+  const clipL = new THREE.Vector3();
+  const clipR = new THREE.Vector3();
 
   const segmentProps = {
     type: "dynamic" as const,
@@ -136,11 +138,11 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
       const j2Pos = j2.current.lerped ?? j2.current.translation();
       const cardPos = card.current.translation();
       const cardRot = card.current.rotation();
-      const quat = new THREE.Quaternion(cardRot.x, cardRot.y, cardRot.z, cardRot.w);
+      quat.set(cardRot.x, cardRot.y, cardRot.z, cardRot.w);
 
       // Clip attachment points in card-local space, rotated to world
-      const clipL = new THREE.Vector3(-0.03, 0.78, 0).applyQuaternion(quat);
-      const clipR = new THREE.Vector3(0.03, 0.78, 0).applyQuaternion(quat);
+      clipL.set(-0.03, 0.78, 0).applyQuaternion(quat);
+      clipR.set(0.03, 0.78, 0).applyQuaternion(quat);
 
       // Left strap: hangs from top-left anchor into left side of clip
       curveL.points[3].set(fixedPos.x - 0.55, fixedPos.y, fixedPos.z);
@@ -157,14 +159,14 @@ function Band({ maxSpeed = 50, minSpeed = 10 }: { maxSpeed?: number; minSpeed?: 
       const oldGeoL = bandL.current.geometry;
       bandL.current.geometry = new THREE.ExtrudeGeometry(shape, {
         extrudePath: curveL,
-        steps: 32,
+        steps: 16,
       });
       oldGeoL?.dispose();
 
       const oldGeoR = bandR.current.geometry;
       bandR.current.geometry = new THREE.ExtrudeGeometry(shape, {
         extrudePath: curveR,
-        steps: 32,
+        steps: 16,
       });
       oldGeoR?.dispose();
 
@@ -513,36 +515,10 @@ export function Lanyard3D({ onContextLost }: { onContextLost?: () => void }) {
         <Physics interpolate gravity={[0, -40, 0]} timeStep={1 / 60}>
           <Band />
         </Physics>
-        <Environment preset="city">
-          <Lightformer
-            intensity={2}
-            color="white"
-            position={[0, -1, 5]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={3}
-            color="white"
-            position={[-1, -1, 1]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={3}
-            color="white"
-            position={[1, 1, 1]}
-            rotation={[0, 0, Math.PI / 3]}
-            scale={[100, 0.1, 1]}
-          />
-          <Lightformer
-            intensity={10}
-            color="white"
-            position={[-10, 0, 14]}
-            rotation={[0, Math.PI / 2, Math.PI / 3]}
-            scale={[100, 10, 1]}
-          />
-        </Environment>
+        <directionalLight intensity={4} position={[0, -1, 5]} />
+        <directionalLight intensity={5} position={[-1, -1, 1]} />
+        <directionalLight intensity={5} position={[1, 1, 1]} />
+        <directionalLight intensity={8} position={[-10, 0, 14]} />
       </Suspense>
     </Canvas>
   );

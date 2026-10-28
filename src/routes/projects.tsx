@@ -1,5 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useSpring,
+  type MotionValue,
+} from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import prints from "@/content/prints.json";
@@ -191,7 +197,8 @@ function WorkPage() {
                       {selectedPrint.title}
                     </h2>
                     <p className="text-base text-muted-foreground leading-relaxed">
-                      {selectedPrint.description[locale as "en" | "id"] ?? selectedPrint.description.en}
+                      {selectedPrint.description[locale as "en" | "id"] ??
+                        selectedPrint.description.en}
                     </p>
                   </motion.div>
 
@@ -224,7 +231,7 @@ function WorkPage() {
                         rel="noreferrer"
                         className="rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background shadow transition-transform hover:scale-105"
                       >
-                        Live Demo 
+                        Live Demo
                       </a>
                     )}
                     {selectedPrint.repo && (
@@ -234,7 +241,7 @@ function WorkPage() {
                         rel="noreferrer"
                         className="rounded-full border border-foreground/20 bg-background/70 px-5 py-2.5 text-sm font-semibold text-foreground transition-transform hover:scale-105"
                       >
-                        GitHub 
+                        GitHub
                       </a>
                     )}
                   </motion.div>
@@ -270,7 +277,7 @@ function HangHero({
   const dragStartScroll = useRef(0);
   const [isDragging, setIsDragging] = useState(false);
   const movedRef = useRef(false);
-  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
+  const mousePosRef = useRef({ x: 0.5, y: 0.5 });
 
   /* idle float */
   const idleOffset = useMotionValue(0);
@@ -325,10 +332,10 @@ function HangHero({
     if (!isDragging) {
       const rect = containerRef.current?.getBoundingClientRect();
       if (rect) {
-        setMousePos({
+        mousePosRef.current = {
           x: (e.clientX - rect.left) / rect.width,
           y: (e.clientY - rect.top) / rect.height,
-        });
+        };
       }
       return;
     }
@@ -339,39 +346,74 @@ function HangHero({
   const onPointerUp = () => setIsDragging(false);
 
   return (
-    <div
-      ref={containerRef}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      className={`relative mt-8 overflow-hidden rounded-[2rem] border border-foreground/10 bg-[radial-gradient(circle_at_1px_1px,hsl(var(--foreground)/.08)_1px,transparent_0)] [background-size:24px_24px] ${isDragging ? "cursor-grabbing" : "cursor-grab"} select-none`}
-      style={{ minHeight: 380 }}
-      aria-label="Draggable project showcase. Drag or use arrow keys to browse."
-    >
-      <div className="pointer-events-none absolute inset-0 z-10 border-[14px] border-transparent [border-image:linear-gradient(135deg,#c9c6bc,#f8f7f3_18%,#a9a69e_38%,#f7f6f1_58%,#bebbb1_78%,#f3f2ec)_1]" />
-      <div className="pointer-events-none absolute left-1/2 top-0 z-10 h-8 w-24 -translate-x-1/2 rounded-b-2xl border-x border-b border-[#a8a59b] bg-gradient-to-b from-[#f9f8f3] to-[#c5c2b8] shadow-md" />
-
-      <motion.div className="flex items-end gap-8 px-10 py-14" style={{ x: springX }}>
-        {items.map((p, i) => (
-          <HangCard
+    <>
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:hidden">
+        {items.map((p) => (
+          <motion.button
             key={p.slug}
-            print={p}
-            index={i}
-            mousePos={mousePos}
-            reduced={reduced}
-            idleY={idleOffset}
-            movedRef={movedRef}
-            isSelected={selectedSlug === p.slug}
-            onSelect={() => onSelect(p)}
-          />
+            type="button"
+            onClick={() => onSelect(p)}
+            whileTap={reduced ? undefined : { scale: 0.98 }}
+            className="overflow-hidden rounded-2xl border border-foreground/10 bg-card text-left text-card-foreground shadow-sm transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label={`Open details for ${p.title}`}
+          >
+            <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+              <img
+                src={p.image}
+                alt={`${p.title} preview`}
+                className="h-full w-full object-cover"
+              />
+              <span className="absolute left-3 top-3 rounded-full bg-black/65 px-2.5 py-1 text-xs font-semibold text-white">
+                {p.category} · {p.year}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3 p-4">
+              <div className="min-w-0">
+                <div className="font-display text-lg font-bold">{p.title}</div>
+                <div className="mt-1 truncate text-xs text-muted-foreground">
+                  {p.tech.join(" · ")}
+                </div>
+              </div>
+              <span className="shrink-0 text-sm font-semibold">View </span>
+            </div>
+          </motion.button>
         ))}
-      </motion.div>
-
-      <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full border border-foreground/10 bg-background/85 px-4 py-2 text-xs text-muted-foreground backdrop-blur">
-        Drag · Scroll · Arrow keys · Click to open
       </div>
-    </div>
+
+      <div
+        ref={containerRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        className={`relative mt-8 hidden overflow-hidden rounded-[2rem] border border-foreground/10 bg-[radial-gradient(circle_at_1px_1px,hsl(var(--foreground)/.08)_1px,transparent_0)] [background-size:24px_24px] md:block ${isDragging ? "cursor-grabbing" : "cursor-grab"} select-none`}
+        style={{ minHeight: 380 }}
+        aria-label="Draggable project showcase. Drag or use arrow keys to browse."
+      >
+        <div className="pointer-events-none absolute inset-0 z-10 border-[14px] border-transparent [border-image:linear-gradient(135deg,#c9c6bc,#f8f7f3_18%,#a9a69e_38%,#f7f6f1_58%,#bebbb1_78%,#f3f2ec)_1]" />
+        <div className="pointer-events-none absolute left-1/2 top-0 z-10 h-8 w-24 -translate-x-1/2 rounded-b-2xl border-x border-b border-[#a8a59b] bg-gradient-to-b from-[#f9f8f3] to-[#c5c2b8] shadow-md" />
+
+        <motion.div className="flex items-end gap-8 px-10 py-14" style={{ x: springX }}>
+          {items.map((p, i) => (
+            <HangCard
+              key={p.slug}
+              print={p}
+              index={i}
+              mousePos={mousePosRef}
+              reduced={reduced}
+              idleY={idleOffset}
+              movedRef={movedRef}
+              isSelected={selectedSlug === p.slug}
+              onSelect={() => onSelect(p)}
+            />
+          ))}
+        </motion.div>
+
+        <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full border border-foreground/10 bg-background/85 px-4 py-2 text-xs text-muted-foreground backdrop-blur">
+          Drag · Scroll · Arrow keys · Click to open
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -387,15 +429,15 @@ function HangCard({
 }: {
   print: Print;
   index: number;
-  mousePos: { x: number; y: number };
+  mousePos: React.RefObject<{ x: number; y: number }>;
   reduced: boolean;
-  idleY: ReturnType<typeof useMotionValue>;
+  idleY: MotionValue<number>;
   movedRef: React.MutableRefObject<boolean>;
   isSelected: boolean;
   onSelect: () => void;
 }) {
-  const px = reduced ? 0 : (mousePos.x - 0.5) * 8;
-  const py = reduced ? 0 : (mousePos.y - 0.5) * 5;
+  const px = reduced ? 0 : (mousePos.current.x - 0.5) * 8;
+  const py = reduced ? 0 : (mousePos.current.y - 0.5) * 5;
   const hoverTilt = index % 2 === 0 ? -4 : 4;
 
   return (
@@ -444,7 +486,7 @@ function HangCard({
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.035]"
               />
               <span className="absolute bottom-3 right-3 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-black shadow-md transition-all group-hover:scale-105">
-                View 
+                View
               </span>
             </div>
             <div className="flex items-end justify-between gap-4 px-2 pb-2 pt-3">

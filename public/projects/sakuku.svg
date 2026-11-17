@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">SakuKu personal finance app</title>
+  <desc id="desc">Illustrated preview of SakuKu running on a smartphone.</desc>
+  <rect width="1200" height="750" rx="36" fill="#E8E7DF"/>
+  <circle cx="1060" cy="108" r="180" fill="#D7DED4"/>
+  <circle cx="155" cy="670" r="210" fill="#D9D8CF"/>
+  <path d="M103 125h221" stroke="#4B5048" stroke-width="5" stroke-linecap="round" opacity=".18"/>
+  <text x="102" y="285" fill="#252923" font-family="Inter,Arial,sans-serif" font-size="76" font-weight="700">SakuKu</text>
+  <text x="106" y="345" fill="#60665D" font-family="Inter,Arial,sans-serif" font-size="27">Personal finance, kept simple.</text>
+  <rect x="104" y="393" width="145" height="43" rx="21.5" fill="#D0D9CD"/>
+  <text x="126" y="421" fill="#425647" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="600">FLUTTER · ANDROID</text>
+  <g transform="rotate(5 811 375)">
+    <rect x="665" y="61" width="368" height="628" rx="54" fill="#252923"/>
+    <rect x="679" y="75" width="340" height="600" rx="43" fill="#F5F5F0"/>
+    <rect x="793" y="91" width="112" height="23" rx="11.5" fill="#252923"/>
+    <text x="710" y="158" fill="#252923" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="700">SakuKu</text>
+    <text x="710" y="194" fill="#73786F" font-family="Inter,Arial,sans-serif" font-size="15">Your finances at a glance</text>
+    <rect x="703" y="218" width="292" height="156" rx="25" fill="#587362"/>
+    <text x="728" y="258" fill="#E6EDE6" font-family="Inter,Arial,sans-serif" font-size="14">TOTAL BALANCE</text>
+    <rect x="728" y="281" width="173" height="22" rx="11" fill="#EDF2EC" opacity=".9"/>
+    <rect x="728" y="323" width="94" height="10" rx="5" fill="#CED9CE" opacity=".8"/>
+    <rect x="846" y="323" width="108" height="10" rx="5" fill="#CED9CE" opacity=".55"/>
+    <rect x="703" y="394" width="137" height="86" rx="20" fill="#E8ECE5"/>
+    <circle cx="730" cy="423" r="11" fill="#829785"/>
+    <rect x="750" y="416" width="61" height="10" rx="5" fill="#A3AAA0"/>
+    <rect x="724" y="447" width="88" height="13" rx="6.5" fill="#626B60"/>
+    <rect x="855" y="394" width="140" height="86" rx="20" fill="#EFE9DE"/>
+    <circle cx="882" cy="423" r="11" fill="#B6A174"/>
+    <rect x="902" y="416" width="65" height="10" rx="5" fill="#B8B0A0"/>
+    <rect x="876" y="447" width="90" height="13" rx="6.5" fill="#756E5F"/>
+    <text x="709" y="520" fill="#33382F" font-family="Inter,Arial,sans-serif" font-size="16" font-weight="700">Recent activity</text>
+    <rect x="705" y="539" width="287" height="1" fill="#E1E2DC"/>
+    <circle cx="729" cy="567" r="15" fill="#E8ECE5"/>
+    <rect x="757" y="557" width="98" height="9" rx="4.5" fill="#A2A79D"/>
+    <rect x="757" y="573" width="65" height="8" rx="4" fill="#D0D2CB"/>
+    <rect x="921" y="559" width="58" height="10" rx="5" fill="#8C998B"/>
+    <rect x="705" y="597" width="287" height="1" fill="#E1E2DC"/>
+    <circle cx="729" cy="624" r="15" fill="#F0EADD"/>
+    <rect x="757" y="614" width="104" height="9" rx="4.5" fill="#A2A79D"/>
+    <rect x="757" y="630" width="72" height="8" rx="4" fill="#D0D2CB"/>
+    <rect x="922" y="616" width="57" height="10" rx="5" fill="#A29575"/>
+  </g>
+</svg>

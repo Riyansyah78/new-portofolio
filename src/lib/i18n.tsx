@@ -85,6 +85,7 @@ const translations: Translations = {
   "projects.all": { en: "All", id: "Semua" },
   "projects.close": { en: "Close", id: "Tutup" },
   "projects.liveDemo": { en: "Live demo", id: "Demo langsung" },
+  "projects.download": { en: "Download APK", id: "Unduh APK" },
   "projects.source": { en: "Source", id: "Kode sumber" },
 
   // Gallery

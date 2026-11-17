@@ -234,6 +234,16 @@ function WorkPage() {
                         Live Demo
                       </a>
                     )}
+                    {selectedPrint.download && (
+                      <a
+                        href={selectedPrint.download}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-full bg-foreground px-5 py-2.5 text-sm font-semibold text-background transition-transform hover:scale-105"
+                      >
+                        {t("projects.download")}
+                      </a>
+                    )}
                     {selectedPrint.repo && (
                       <a
                         href={selectedPrint.repo}

@@ -129,6 +129,16 @@ function PrintPage() {
                 Live Demo
               </a>
             )}
+            {print.download && (
+              <a
+                href={print.download}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background shadow-pop transition-transform hover:scale-105"
+              >
+                {locale === "id" ? "Unduh APK" : "Download APK"}
+              </a>
+            )}
             {print.repo && (
               <a
                 href={print.repo}

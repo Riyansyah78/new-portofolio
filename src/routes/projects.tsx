@@ -329,6 +329,7 @@ function HangHero({
 
   /* drag */
   const onPointerDown = (e: React.PointerEvent) => {
+    movedRef.current = false;
     const target = e.target as HTMLElement;
     if (target.closest("button")) return;
 

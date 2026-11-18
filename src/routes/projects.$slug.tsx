@@ -55,11 +55,7 @@ function PrintPage() {
           {/* extra frames bar */}
           <div className="flex gap-2 border-b border-foreground/10 bg-background/50 p-3">
             <div className="h-12 w-20 overflow-hidden rounded-lg border border-foreground/15 bg-muted">
-              <img
-                src={print.image}
-                alt=""
-                className="h-full w-full object-cover opacity-80"
-              />
+              <img src={print.image} alt="" className="h-full w-full object-cover opacity-80" />
             </div>
           </div>
 
@@ -98,10 +94,7 @@ function PrintPage() {
 
             <div className="mt-6 flex flex-wrap gap-2">
               {print.tech.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold"
-                >
+                <span key={t} className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">
                   {t}
                 </span>
               ))}
@@ -157,12 +150,10 @@ function PrintPage() {
             </Link>
             <button
               type="button"
-              onClick={() =>
-                navigate({ to: "/projects/$slug", params: { slug: next.slug } })
-              }
+              onClick={() => navigate({ to: "/projects/$slug", params: { slug: next.slug } })}
               className="inline-flex items-center justify-center rounded-full border border-foreground/20 px-6 py-3 text-sm font-semibold transition-transform hover:scale-105 hover:bg-muted"
             >
-              Next  {next.title}
+              Next {next.title}
             </button>
           </motion.div>
         </div>

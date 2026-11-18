@@ -35,10 +35,13 @@ function HomePage() {
         {/* Desktop: full-bleed canvas so the card can be dragged anywhere without clipping.
             The 3D camera keeps the card visually on the right. pointer-events-none lets
             clicks fall through to the text; the inner wrapper re-enables them on the canvas. */}
-        <div className="pointer-events-none absolute inset-0 z-0 hidden md:block">
+        <div className="pointer-events-none absolute inset-0 z-10 hidden md:block">
           <div className="pointer-events-auto h-full w-full">
             <LanyardClient />
           </div>
+        </div>
+        <div className="pointer-events-none absolute inset-0 z-10 md:hidden">
+          <LanyardClient mobileView />
         </div>
 
         <div className="container pointer-events-none relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-8 md:grid-cols-2 md:py-16">
@@ -113,10 +116,8 @@ function HomePage() {
             </motion.div>
           </div>
 
-          {/* Mobile: boxed layout (fallback card shown here) */}
-          <div className="pointer-events-auto relative h-[360px] w-full md:hidden">
-            <LanyardClient />
-          </div>
+          {/* Mobile: compact 3D lanyard with drag disabled */}
+          <div aria-hidden="true" className="h-[360px] w-full md:hidden" />
 
           {/* Desktop: empty spacer to preserve the grid's right column */}
           <div className="hidden md:block" />

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/site/language-switcher";
 
@@ -8,6 +8,13 @@ export function Nav() {
   const { pathname } = useLocation();
   const { t } = useI18n();
   const [hoveredPath, setHoveredPath] = useState<string | null>(null);
+  const [pillBounds, setPillBounds] = useState<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
   const links = [
     { to: "/", label: t("nav.home") },
@@ -15,6 +22,19 @@ export function Nav() {
     { to: "/projects", label: t("nav.projects") },
     { to: "/contact", label: t("nav.contact") },
   ] as const;
+
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    const activeLink = nav?.querySelector<HTMLElement>(`[data-nav-link="${pathname}"]`);
+    if (!nav || !activeLink) return;
+
+    setPillBounds({
+      x: activeLink.offsetLeft,
+      y: activeLink.offsetTop,
+      width: activeLink.offsetWidth,
+      height: activeLink.offsetHeight,
+    });
+  }, [pathname]);
 
   return (
     <motion.nav
@@ -24,9 +44,18 @@ export function Nav() {
       className="fixed left-1/2 top-5 z-50 -translate-x-1/2"
     >
       <div
+        ref={navRef}
         onMouseLeave={() => setHoveredPath(null)}
         className="relative flex items-center gap-1 rounded-full border border-border/60 bg-background/80 p-1.5 shadow-pop backdrop-blur-xl"
       >
+        {pillBounds && (
+          <motion.span
+            initial={false}
+            animate={pillBounds}
+            transition={{ type: "spring", stiffness: 360, damping: 24, mass: 0.65 }}
+            className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,0.22),0_4px_14px_rgba(0,0,0,0.14)]"
+          />
+        )}
         {links.map((link) => {
           const active = pathname === link.to;
           const hovered = hoveredPath === link.to;
@@ -45,20 +74,6 @@ export function Nav() {
                   layoutId="nav-hover-pill"
                   className="absolute inset-0 rounded-full bg-foreground/8"
                   transition={{ type: "spring", stiffness: 450, damping: 30 }}
-                />
-              )}
-
-              {/* Active liquid spring pill */}
-              {active && (
-                <motion.span
-                  layoutId="nav-active-pill"
-                  className="absolute inset-0 rounded-full bg-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,0.22),0_4px_14px_rgba(0,0,0,0.14)]"
-                  transition={{
-                    type: "spring",
-                    stiffness: 360,
-                    damping: 24,
-                    mass: 0.65,
-                  }}
                 />
               )}
 
